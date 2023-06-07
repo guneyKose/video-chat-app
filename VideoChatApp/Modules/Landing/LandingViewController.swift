@@ -8,9 +8,6 @@
 import UIKit
 import SnapKit
 
-import UIKit
-import SnapKit
-
 class LandingViewController: UIViewController {
     
     var viewModel: LandingViewModelProtocol?
