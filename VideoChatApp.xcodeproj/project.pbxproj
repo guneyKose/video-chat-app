@@ -1,0 +1,501 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		309980C42A30A645009CB536 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980C32A30A645009CB536 /* AppDelegate.swift */; };
+		309980C62A30A645009CB536 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980C52A30A645009CB536 /* SceneDelegate.swift */; };
+		309980C82A30A645009CB536 /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980C72A30A645009CB536 /* LandingViewController.swift */; };
+		309980CD2A30A647009CB536 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 309980CC2A30A647009CB536 /* Assets.xcassets */; };
+		309980D02A30A647009CB536 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 309980CE2A30A647009CB536 /* LaunchScreen.storyboard */; };
+		309980DF2A30A754009CB536 /* LandingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980DE2A30A754009CB536 /* LandingViewModel.swift */; };
+		309980E12A30A793009CB536 /* VideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980E02A30A793009CB536 /* VideoCallViewController.swift */; };
+		309980E32A30A7A5009CB536 /* VideoCallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980E22A30A7A5009CB536 /* VideoCallViewModel.swift */; };
+		309980E82A30A7F4009CB536 /* VideoCall.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 309980E72A30A7F4009CB536 /* VideoCall.storyboard */; };
+		309980EB2A30B20D009CB536 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 309980EA2A30B20D009CB536 /* SnapKit */; };
+		309980EE2A30B264009CB536 /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = 309980ED2A30B264009CB536 /* RtcBasic */; };
+		309980F12A30BE94009CB536 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980F02A30BE94009CB536 /* AlertManager.swift */; };
+		309980F32A30CD68009CB536 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 309980F22A30CD68009CB536 /* Main.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		309980C02A30A645009CB536 /* VideoChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		309980C32A30A645009CB536 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		309980C52A30A645009CB536 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		309980C72A30A645009CB536 /* LandingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingViewController.swift; sourceTree = "<group>"; };
+		309980CC2A30A647009CB536 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		309980CF2A30A647009CB536 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		309980D12A30A647009CB536 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		309980DE2A30A754009CB536 /* LandingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingViewModel.swift; sourceTree = "<group>"; };
+		309980E02A30A793009CB536 /* VideoCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewController.swift; sourceTree = "<group>"; };
+		309980E22A30A7A5009CB536 /* VideoCallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewModel.swift; sourceTree = "<group>"; };
+		309980E72A30A7F4009CB536 /* VideoCall.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VideoCall.storyboard; sourceTree = "<group>"; };
+		309980F02A30BE94009CB536 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		309980F22A30CD68009CB536 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		309980BD2A30A645009CB536 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				309980EB2A30B20D009CB536 /* SnapKit in Frameworks */,
+				309980EE2A30B264009CB536 /* RtcBasic in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		309980B72A30A645009CB536 = {
+			isa = PBXGroup;
+			children = (
+				309980C22A30A645009CB536 /* VideoChatApp */,
+				309980C12A30A645009CB536 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		309980C12A30A645009CB536 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				309980C02A30A645009CB536 /* VideoChatApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		309980C22A30A645009CB536 /* VideoChatApp */ = {
+			isa = PBXGroup;
+			children = (
+				309980D72A30A68C009CB536 /* Application */,
+				309980D82A30A699009CB536 /* Modules */,
+				309980EF2A30BE7C009CB536 /* Managers */,
+				309980D92A30A6A7009CB536 /* UI */,
+				309980DA2A30A6BA009CB536 /* Resources */,
+				309980D12A30A647009CB536 /* Info.plist */,
+			);
+			path = VideoChatApp;
+			sourceTree = "<group>";
+		};
+		309980D72A30A68C009CB536 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				309980C32A30A645009CB536 /* AppDelegate.swift */,
+				309980C52A30A645009CB536 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		309980D82A30A699009CB536 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				309980DB2A30A703009CB536 /* Landing */,
+				309980DD2A30A718009CB536 /* VideoCall */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		309980D92A30A6A7009CB536 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				309980E52A30A7D2009CB536 /* Launch */,
+				309980E42A30A7C9009CB536 /* Landing */,
+				309980E62A30A7D9009CB536 /* VideoCall */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		309980DA2A30A6BA009CB536 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				309980CC2A30A647009CB536 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		309980DB2A30A703009CB536 /* Landing */ = {
+			isa = PBXGroup;
+			children = (
+				309980C72A30A645009CB536 /* LandingViewController.swift */,
+				309980DE2A30A754009CB536 /* LandingViewModel.swift */,
+			);
+			path = Landing;
+			sourceTree = "<group>";
+		};
+		309980DD2A30A718009CB536 /* VideoCall */ = {
+			isa = PBXGroup;
+			children = (
+				309980E02A30A793009CB536 /* VideoCallViewController.swift */,
+				309980E22A30A7A5009CB536 /* VideoCallViewModel.swift */,
+			);
+			path = VideoCall;
+			sourceTree = "<group>";
+		};
+		309980E42A30A7C9009CB536 /* Landing */ = {
+			isa = PBXGroup;
+			children = (
+				309980F22A30CD68009CB536 /* Main.storyboard */,
+			);
+			path = Landing;
+			sourceTree = "<group>";
+		};
+		309980E52A30A7D2009CB536 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				309980CE2A30A647009CB536 /* LaunchScreen.storyboard */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
+		309980E62A30A7D9009CB536 /* VideoCall */ = {
+			isa = PBXGroup;
+			children = (
+				309980E72A30A7F4009CB536 /* VideoCall.storyboard */,
+			);
+			path = VideoCall;
+			sourceTree = "<group>";
+		};
+		309980EF2A30BE7C009CB536 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				309980F02A30BE94009CB536 /* AlertManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		309980BF2A30A645009CB536 /* VideoChatApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 309980D42A30A647009CB536 /* Build configuration list for PBXNativeTarget "VideoChatApp" */;
+			buildPhases = (
+				309980BC2A30A645009CB536 /* Sources */,
+				309980BD2A30A645009CB536 /* Frameworks */,
+				309980BE2A30A645009CB536 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VideoChatApp;
+			packageProductDependencies = (
+				309980EA2A30B20D009CB536 /* SnapKit */,
+				309980ED2A30B264009CB536 /* RtcBasic */,
+			);
+			productName = VideoChatApp;
+			productReference = 309980C02A30A645009CB536 /* VideoChatApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		309980B82A30A645009CB536 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					309980BF2A30A645009CB536 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 309980BB2A30A645009CB536 /* Build configuration list for PBXProject "VideoChatApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 309980B72A30A645009CB536;
+			packageReferences = (
+				309980E92A30B20D009CB536 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				309980EC2A30B264009CB536 /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */,
+			);
+			productRefGroup = 309980C12A30A645009CB536 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				309980BF2A30A645009CB536 /* VideoChatApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		309980BE2A30A645009CB536 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				309980D02A30A647009CB536 /* LaunchScreen.storyboard in Resources */,
+				309980CD2A30A647009CB536 /* Assets.xcassets in Resources */,
+				309980E82A30A7F4009CB536 /* VideoCall.storyboard in Resources */,
+				309980F32A30CD68009CB536 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		309980BC2A30A645009CB536 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				309980E32A30A7A5009CB536 /* VideoCallViewModel.swift in Sources */,
+				309980E12A30A793009CB536 /* VideoCallViewController.swift in Sources */,
+				309980C82A30A645009CB536 /* LandingViewController.swift in Sources */,
+				309980C42A30A645009CB536 /* AppDelegate.swift in Sources */,
+				309980DF2A30A754009CB536 /* LandingViewModel.swift in Sources */,
+				309980F12A30BE94009CB536 /* AlertManager.swift in Sources */,
+				309980C62A30A645009CB536 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		309980CE2A30A647009CB536 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				309980CF2A30A647009CB536 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		309980D22A30A647009CB536 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		309980D32A30A647009CB536 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		309980D52A30A647009CB536 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9694Q29RZR;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VideoChatApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.guneyscorp.VideoChatApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		309980D62A30A647009CB536 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9694Q29RZR;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VideoChatApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.guneyscorp.VideoChatApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		309980BB2A30A645009CB536 /* Build configuration list for PBXProject "VideoChatApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				309980D22A30A647009CB536 /* Debug */,
+				309980D32A30A647009CB536 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		309980D42A30A647009CB536 /* Build configuration list for PBXNativeTarget "VideoChatApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				309980D52A30A647009CB536 /* Debug */,
+				309980D62A30A647009CB536 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		309980E92A30B20D009CB536 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		309980EC2A30B264009CB536 /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AgoraIO/AgoraRtcEngine_iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		309980EA2A30B20D009CB536 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 309980E92A30B20D009CB536 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		309980ED2A30B264009CB536 /* RtcBasic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 309980EC2A30B264009CB536 /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */;
+			productName = RtcBasic;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 309980B82A30A645009CB536 /* Project object */;
+}
