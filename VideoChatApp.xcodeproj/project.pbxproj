@@ -20,6 +20,10 @@
 		309980EE2A30B264009CB536 /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = 309980ED2A30B264009CB536 /* RtcBasic */; };
 		309980F12A30BE94009CB536 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980F02A30BE94009CB536 /* AlertManager.swift */; };
 		309980F32A30CD68009CB536 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 309980F22A30CD68009CB536 /* Main.storyboard */; };
+		30E507912A31BD3000CB507D /* ID++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507902A31BD3000CB507D /* ID++.swift */; };
+		30E507932A31D3FB00CB507D /* UIView++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507922A31D3FB00CB507D /* UIView++.swift */; };
+		30E507952A31D44900CB507D /* VideoCall+Agora.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507942A31D44900CB507D /* VideoCall+Agora.swift */; };
+		30E507982A31DB4C00CB507D /* AgoraKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507972A31DB4C00CB507D /* AgoraKey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +40,11 @@
 		309980E72A30A7F4009CB536 /* VideoCall.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VideoCall.storyboard; sourceTree = "<group>"; };
 		309980F02A30BE94009CB536 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		309980F22A30CD68009CB536 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		30E507902A31BD3000CB507D /* ID++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ID++.swift"; sourceTree = "<group>"; };
+		30E507922A31D3FB00CB507D /* UIView++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView++.swift"; sourceTree = "<group>"; };
+		30E507942A31D44900CB507D /* VideoCall+Agora.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoCall+Agora.swift"; sourceTree = "<group>"; };
+		30E507972A31DB4C00CB507D /* AgoraKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraKey.swift; sourceTree = "<group>"; };
+		30E507992A31DDDE00CB507D /* VideoChatApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VideoChatApp.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +79,8 @@
 		309980C22A30A645009CB536 /* VideoChatApp */ = {
 			isa = PBXGroup;
 			children = (
+				30E507992A31DDDE00CB507D /* VideoChatApp.entitlements */,
+				30E5078F2A31BD2000CB507D /* Extensions */,
 				309980D72A30A68C009CB536 /* Application */,
 				309980D82A30A699009CB536 /* Modules */,
 				309980EF2A30BE7C009CB536 /* Managers */,
@@ -85,6 +96,7 @@
 			children = (
 				309980C32A30A645009CB536 /* AppDelegate.swift */,
 				309980C52A30A645009CB536 /* SceneDelegate.swift */,
+				30E507972A31DB4C00CB507D /* AgoraKey.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -130,6 +142,7 @@
 			children = (
 				309980E02A30A793009CB536 /* VideoCallViewController.swift */,
 				309980E22A30A7A5009CB536 /* VideoCallViewModel.swift */,
+				30E507942A31D44900CB507D /* VideoCall+Agora.swift */,
 			);
 			path = VideoCall;
 			sourceTree = "<group>";
@@ -164,6 +177,15 @@
 				309980F02A30BE94009CB536 /* AlertManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		30E5078F2A31BD2000CB507D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				30E507902A31BD3000CB507D /* ID++.swift */,
+				30E507922A31D3FB00CB507D /* UIView++.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,8 +268,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30E507912A31BD3000CB507D /* ID++.swift in Sources */,
 				309980E32A30A7A5009CB536 /* VideoCallViewModel.swift in Sources */,
+				30E507932A31D3FB00CB507D /* UIView++.swift in Sources */,
 				309980E12A30A793009CB536 /* VideoCallViewController.swift in Sources */,
+				30E507982A31DB4C00CB507D /* AgoraKey.swift in Sources */,
+				30E507952A31D44900CB507D /* VideoCall+Agora.swift in Sources */,
 				309980C82A30A645009CB536 /* LandingViewController.swift in Sources */,
 				309980C42A30A645009CB536 /* AppDelegate.swift in Sources */,
 				309980DF2A30A754009CB536 /* LandingViewModel.swift in Sources */,
@@ -389,6 +415,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VideoChatApp/VideoChatApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9694Q29RZR;
@@ -418,6 +445,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VideoChatApp/VideoChatApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9694Q29RZR;

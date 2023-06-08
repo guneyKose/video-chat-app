@@ -6,7 +6,13 @@
 //
 
 import Foundation
+import AgoraRtcKit
 
 final class VideoCallViewModel {
     
+    var agoraEngine: AgoraRtcEngineKit!
+    var userRole: AgoraClientRole = .broadcaster
+    var joined = false
+    var isCameraEnabled = true
+    var isMicOn = true    
 }
