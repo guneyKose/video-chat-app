@@ -18,7 +18,6 @@ class LandingViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.viewModel = LandingViewModel()
     }
     
     init(viewModel: LandingViewModelProtocol) {
@@ -28,6 +27,7 @@ class LandingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViewModel()
         setupUI()
     }
     
@@ -73,16 +73,20 @@ class LandingViewController: UIViewController {
         usernameTextField.autocorrectionType = .no
         usernameTextField.autocapitalizationType = .none
         usernameTextField.layer.borderWidth = 1
-        usernameTextField.layer.cornerRadius = 10
+        usernameTextField.layer.cornerRadius = 6
         usernameTextField.layer.borderColor = UIColor.red.cgColor
         
-        var buttonConfig = UIButton.Configuration.filled()
-        buttonConfig.cornerStyle = .capsule
+        let buttonConfig = UIButton.Configuration.filled()
         
-        startCallButton.setTitleColor(.white, for: .normal)
+        startCallButton.setTitleColor(.systemBackground, for: .normal)
+        startCallButton.tintColor = .label
         startCallButton.setTitle(viewModel.buttonTitle, for: .normal)
         startCallButton.configuration = buttonConfig
         startCallButton.addTarget(self, action: #selector(startCall), for: .touchUpInside)
+    }
+    
+    func setupViewModel() {
+        self.viewModel = LandingViewModel()
     }
     
     @objc func startCall() {
@@ -93,7 +97,9 @@ class LandingViewController: UIViewController {
                         self.goToCall()
                     }
                 } else {
-                    debugPrint("You need to give permission to video chat")
+                    DispatchQueue.main.async {
+                        self.showCameraPermissionAlert()
+                    }
                 }
             }
         } else if !usernameTextField.hasText {
@@ -101,6 +107,31 @@ class LandingViewController: UIViewController {
         } else {
             self.present(AlertManager.tooShort.alert, animated: true)
         }
+    }
+    
+    func showCameraPermissionAlert() {
+        let alertController = UIAlertController(
+            title: "Camera and Mic Usage",
+            message: "You need to give permission to video chat.",
+            preferredStyle: .alert
+        )
+        
+        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+            guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            
+            if UIApplication.shared.canOpenURL(settingsURL) {
+                UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     private func goToCall() {

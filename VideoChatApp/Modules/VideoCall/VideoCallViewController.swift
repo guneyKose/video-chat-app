@@ -10,6 +10,8 @@ import SnapKit
 import AgoraRtcKit
 
 class VideoCallViewController: UIViewController {
+    
+    var viewModel: VideoCallViewModelProtocol!
    
     var localView: UIView!
     var remoteView: UIView!
@@ -21,20 +23,22 @@ class VideoCallViewController: UIViewController {
     var switchCameraButton: UIButton!
     var buttonStack: UIStackView!
     
-    let camOnImage = UIImage(systemName: "video.fill")
-    let camOffImage = UIImage(systemName: "video.slash.fill")
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
     
-    let micOnImage = UIImage(systemName: "mic.fill")
-    let micOffImage = UIImage(systemName: "mic.slash.fill")
-    
-    let viewModel = VideoCallViewModel()
+    init(viewModel: VideoCallViewModelProtocol) {
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
-        self.initializeAgoraEngine()
-        self.setupLocalVideo()
-        self.joinChannel()
+        setupViewModel()
+        setupUI()
+        setupLocalVideo()
+        initializeAgoraEngine()
+        joinChannel()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -55,7 +59,7 @@ class VideoCallViewController: UIViewController {
         view.addSubview(remoteView)
         view.addSubview(localView)
         remoteView.addSubview(loadingIcon)
-        remoteView.addSubview(controlView)
+        view.addSubview(controlView)
         controlView.addSubview(buttonStack)
         buttonStack.addArrangedSubview(camButton)
         buttonStack.addArrangedSubview(switchCameraButton)
@@ -69,9 +73,8 @@ class VideoCallViewController: UIViewController {
         localView.layer.cornerRadius = 10
         localView.clipsToBounds = true
         localView.makeDraggable()
-        
         loadingIcon.style = .large
-        loadingIcon.color = .black
+        loadingIcon.color = .label
         loadingIcon.center = remoteView.center
         loadingIcon.startAnimating()
         
@@ -84,6 +87,44 @@ class VideoCallViewController: UIViewController {
         buttonStack.alignment = .center
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 12
+    }
+    
+    func remoteVideoStatusChanged() {
+        if viewModel.remoteVideoIsOn {
+            let blur = remoteView.viewWithTag(101)
+            blur?.removeFromSuperview()
+        } else {
+            let blurEffect = UIBlurEffect(style: .regular)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView.tag = 101
+            blurEffectView.frame = remoteView.bounds
+            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            remoteView.addSubview(blurEffectView)
+        }
+    }
+    
+    func remoteAudioStatusChanged() {
+        if viewModel.remoteAudioIsOn {
+            let micView = remoteView.viewWithTag(102)
+            micView?.removeFromSuperview()
+        } else {
+
+            let micImage = UIImageView()
+            remoteView.addSubview(micImage)
+            micImage.tag = 102
+            
+            micImage.snp.makeConstraints { make in
+                make.size.equalTo(CGSize(width: 50, height: 50))
+                make.center.equalTo(remoteView.center)
+            }
+            
+            micImage.tintColor = .white
+            micImage.image = UIImage(systemName: "mic.slash.fill")
+        }
+    }
+    
+    func setupViewModel() {
+        viewModel = VideoCallViewModel(agoraEngine: AgoraRtcEngineKit())
     }
     
     private func createConstraints() {
@@ -137,10 +178,20 @@ class VideoCallViewController: UIViewController {
         micButton.tintColor = .white
         endCallButton.tintColor = .red
         
-        camButton.setImage(camOnImage, for: .normal)
-        switchCameraButton.setImage(UIImage(systemName: "camera.rotate.fill"), for: .normal)
-        micButton.setImage(micOnImage, for: .normal)
-        endCallButton.setImage(UIImage(systemName: "phone.down.fill"), for: .normal)
+        let camOnImage = UIImage(systemName: "video.fill")
+        let camOffImage = UIImage(systemName: "video.slash.fill")
+        let micOnImage = UIImage(systemName: "mic.fill")
+        let micOffImage = UIImage(systemName: "mic.slash.fill")
+        let switchCamImage = UIImage(systemName: "camera.rotate.fill")
+        let endCallImage = UIImage(systemName: "phone.down.fill")
+        
+        let camImage = viewModel.isCameraEnabled ? camOnImage : camOffImage
+        let micImage = viewModel.isMicOn ? micOnImage : micOffImage
+        
+        camButton.setImage(camImage, for: .normal)
+        switchCameraButton.setImage(switchCamImage, for: .normal)
+        micButton.setImage(micImage, for: .normal)
+        endCallButton.setImage(endCallImage, for: .normal)
         
         camButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
         switchCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
@@ -148,30 +199,20 @@ class VideoCallViewController: UIViewController {
         endCallButton.addTarget(self, action: #selector(endCall), for: .touchUpInside)
     }
     
+    //MARK: - Button Actions
     @objc func toggleCamera() {
-        if viewModel.isCameraEnabled {
-            viewModel.agoraEngine.disableVideo()
-            camButton.setImage(camOffImage, for: .normal)
-        } else {
-            viewModel.agoraEngine.enableVideo()
-            camButton.setImage(camOnImage, for: .normal)
-        }
-        viewModel.isCameraEnabled.toggle()
+        viewModel.toggleCamera()
+        setupButtons()
+        localView.isHidden = !viewModel.isCameraEnabled
     }
     
     @objc func switchCamera() {
-        viewModel.agoraEngine.switchCamera()
+        viewModel.switchCamera()
     }
     
     @objc func toggleMic() {
-        if viewModel.isMicOn {
-            viewModel.agoraEngine.disableAudio()
-            micButton.setImage(micOffImage, for: .normal)
-        } else {
-            viewModel.agoraEngine.enableAudio()
-            micButton.setImage(micOnImage, for: .normal)
-        }
-        viewModel.isMicOn.toggle()
+        viewModel.toggleMic()
+        setupButtons()
     }
     
     @objc func endCall() {

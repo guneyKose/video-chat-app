@@ -71,4 +71,32 @@ extension VideoCallViewController: AgoraRtcEngineDelegate {
         // Check if leaving the channel was successful and set joined Bool accordingly
         if result == 0 { viewModel.joined = false }
     }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason, elapsed: Int) {
+        switch state {
+        case .starting, .decoding:
+            viewModel.remoteVideoIsOn = true
+            remoteVideoStatusChanged()
+        case .stopped, .frozen, .failed:
+            viewModel.remoteVideoIsOn = false
+            remoteVideoStatusChanged()
+        @unknown default: break
+        }
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState, reason: AgoraAudioRemoteReason, elapsed: Int) {
+        switch state {
+        case .starting, .decoding:
+            viewModel.remoteAudioIsOn = true
+            remoteAudioStatusChanged()
+        case .stopped, .frozen, .failed:
+            viewModel.remoteAudioIsOn = false
+            remoteAudioStatusChanged()
+        @unknown default: break
+        }
+    }
+    //When remote user leaves the channel.
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+        endCall()
+    }
 }

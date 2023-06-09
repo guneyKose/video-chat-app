@@ -27,7 +27,7 @@ extension UIView {
         let limit = CGRect(x: 12,
                            y: 100,
                            width: width - 24,
-                           height: height - 112)
+                           height: height - 262)
         
         let translation = gesture.translation(in: gesture.view?.superview)
         
