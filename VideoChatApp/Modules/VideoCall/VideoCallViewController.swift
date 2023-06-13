@@ -22,6 +22,7 @@ class VideoCallViewController: UIViewController {
     var endCallButton: UIButton!
     var switchCameraButton: UIButton!
     var buttonStack: UIStackView!
+    var informUserLabel: UILabel!
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -34,15 +35,14 @@ class VideoCallViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViewModel()
         setupUI()
-        setupLocalVideo()
-        initializeAgoraEngine()
-        joinChannel()
+        viewModel.setupLocalVideo(localView: localView)
+        viewModel.initializeAgoraEngine(delegate: self)
+        viewModel.joinChannel(localView: localView)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        self.leaveChannel()
+        viewModel.leaveChannel()
     }
     
     private func setupUI() {
@@ -55,11 +55,13 @@ class VideoCallViewController: UIViewController {
         endCallButton = UIButton()
         camButton = UIButton()
         switchCameraButton = UIButton()
+        informUserLabel = UILabel()
         
         view.addSubview(remoteView)
         view.addSubview(localView)
-        remoteView.addSubview(loadingIcon)
         view.addSubview(controlView)
+        remoteView.addSubview(loadingIcon)
+        remoteView.addSubview(informUserLabel)
         controlView.addSubview(buttonStack)
         buttonStack.addArrangedSubview(camButton)
         buttonStack.addArrangedSubview(switchCameraButton)
@@ -87,6 +89,10 @@ class VideoCallViewController: UIViewController {
         buttonStack.alignment = .center
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 12
+        
+        informUserLabel.textColor = .label
+        informUserLabel.textAlignment = .center
+        informUserLabel.text = "Waiting for the other user..."
     }
     
     func remoteVideoStatusChanged() {
@@ -123,14 +129,10 @@ class VideoCallViewController: UIViewController {
         }
     }
     
-    func setupViewModel() {
-        viewModel = VideoCallViewModel(agoraEngine: AgoraRtcEngineKit())
-    }
-    
     private func createConstraints() {
         localView.snp.makeConstraints { make in
-            make.width.equalTo(view.frame.width / 3)
-            make.height.equalTo(view.frame.width / 2.5)
+            make.width.equalToSuperview().dividedBy(3)
+            make.height.equalTo(localView.snp.width).multipliedBy(1.33)
             make.top.equalTo(view.snp.top).offset(100)
             make.right.equalTo(view.snp.right).offset(-12)
         }
@@ -142,7 +144,7 @@ class VideoCallViewController: UIViewController {
         }
         
         buttonStack.snp.makeConstraints { make in
-            make.width.equalTo(view.frame.width - 48)
+            make.width.equalToSuperview().offset(-40)
             make.height.equalTo(100)
             make.center.equalTo(controlView)
         }
@@ -161,6 +163,11 @@ class VideoCallViewController: UIViewController {
         
         endCallButton.snp.makeConstraints { make in
             make.size.equalTo(camButton)
+        }
+        
+        informUserLabel.snp.makeConstraints { make in
+            make.top.equalTo(loadingIcon.snp.bottom).offset(30)
+            make.width.equalToSuperview()
         }
     }
     
@@ -216,7 +223,7 @@ class VideoCallViewController: UIViewController {
     }
     
     @objc func endCall() {
-        leaveChannel()
+        viewModel.leaveChannel()
         navigationController?.popViewController(animated: true)
     }
 }
