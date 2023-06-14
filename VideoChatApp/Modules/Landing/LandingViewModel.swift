@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 protocol LandingViewModelProtocol {
     var pageTitle: String { get }
@@ -19,6 +20,7 @@ protocol LandingViewModelProtocol {
     func requestCameraAndMicrophonePermission(completion: @escaping (Bool) -> Void)
     func checkUserInput(input: String?, range: NSRange, string: String) -> Bool
     func onStartCall(input: String?)
+    func changeTextFieldBorderColor(input: String) -> CGColor
 }
 
 final class LandingViewModel: LandingViewModelProtocol {
@@ -97,7 +99,7 @@ final class LandingViewModel: LandingViewModelProtocol {
     
     func checkUserInput(input: String?, range: NSRange, string: String) -> Bool {
         guard let userInput = input else { return false }
-
+        
         let newText = (userInput as NSString).replacingCharacters(in: range, with: string)
         
         //Max char count.
@@ -132,6 +134,14 @@ final class LandingViewModel: LandingViewModelProtocol {
             self.delegate?.showAlert(type: .enterUsername)
         } else {
             self.delegate?.showAlert(type: .tooShort)
+        }
+    }
+    
+    func changeTextFieldBorderColor(input: String) -> CGColor {
+        if input.count > 2 {
+            return UIColor.green.cgColor
+        } else {
+            return UIColor.red.cgColor
         }
     }
 }

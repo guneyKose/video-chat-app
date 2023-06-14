@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import AgoraRtcKit
 
 protocol LandingProtocol: AnyObject {
     func showAlert(type: AlertManager)
@@ -103,7 +102,12 @@ extension LandingViewController: LandingProtocol {
     
     func navigateToVideoCall() {
         let vc = VideoCallViewController(viewModel: VideoCallViewModel())
-        self.navigationController?.pushViewController(vc, animated: false)
+        UIView.transition(with: self.navigationController!.view,
+                          duration: 0.3,
+                          options: .transitionFlipFromRight,
+                          animations: {
+            self.navigationController?.pushViewController(vc, animated: false)
+        }, completion: nil)
     }
 }
 
@@ -116,8 +120,7 @@ extension LandingViewController: UITextFieldDelegate {
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        usernameTextField.layer.borderColor = (textField.text?.count ?? 0 > 2) ?
-        UIColor.green.cgColor : UIColor.red.cgColor
+        textField.layer.borderColor = viewModel.changeTextFieldBorderColor(input: textField.text ?? "")
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

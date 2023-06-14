@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import AgoraRtcKit
 
 class VideoCallViewController: UIViewController {
     

@@ -7,7 +7,6 @@
 
 
 import UIKit
-import AgoraRtcKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
