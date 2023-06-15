@@ -7,10 +7,33 @@
 
 import UIKit
 import SnapKit
+import AgoraRtcKit
+
+enum ButtonIconType {
+    case micOn, micOff, videoOn, videoOff
+    
+    var icon: UIImage? {
+        switch self {
+        case .micOn:
+            return UIImage(systemName: "mic.fill")
+        case .micOff:
+            return UIImage(systemName: "mic.slash.fill")
+        case .videoOn:
+            return UIImage(systemName: "video.fill")
+        case .videoOff:
+            return UIImage(systemName: "video.slash.fill")
+        }
+    }
+}
+
+protocol VideoCallView: AnyObject {
+    func endCall()
+    func changeButtonIcons(mic: ButtonIconType?, video: ButtonIconType?)
+}
 
 class VideoCallViewController: UIViewController {
     
-    var viewModel: VideoCallViewModelProtocol!
+    var viewModel: VideoCallViewModel!
    
     var localView: UIView!
     var remoteView: UIView!
@@ -27,21 +50,21 @@ class VideoCallViewController: UIViewController {
         super.init(coder: coder)
     }
     
-    init(viewModel: VideoCallViewModelProtocol) {
+    init(viewModel: VideoCallViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
+        self.viewModel.view = self
+        self.viewModel.agoraManager.view = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        viewModel.setupLocalVideo(localView: localView)
-        viewModel.initializeAgoraEngine(delegate: self)
-        viewModel.joinChannel(localView: localView)
+        viewModel.onViewDidLoad()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        viewModel.leaveChannel()
+        viewModel.onViewDidDisappear()
     }
     
     private func setupUI() {
@@ -92,43 +115,16 @@ class VideoCallViewController: UIViewController {
         informUserLabel.textColor = .label
         informUserLabel.textAlignment = .center
         informUserLabel.text = "Waiting for the other user..."
-    }
-    
-    func remoteVideoStatusChanged() {
-        if viewModel.remoteVideoIsOn {
-            let blur = remoteView.viewWithTag(101)
-            blur?.removeFromSuperview()
-        } else {
-            let blurEffect = UIBlurEffect(style: .regular)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.tag = 101
-            blurEffectView.frame = remoteView.bounds
-            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            remoteView.addSubview(blurEffectView)
-        }
-    }
-    
-    func remoteAudioStatusChanged() {
-        if viewModel.remoteAudioIsOn {
-            let micView = remoteView.viewWithTag(102)
-            micView?.removeFromSuperview()
-        } else {
-
-            let micImage = UIImageView()
-            remoteView.addSubview(micImage)
-            micImage.tag = 102
-            
-            micImage.snp.makeConstraints { make in
-                make.size.equalTo(CGSize(width: 50, height: 50))
-                make.center.equalTo(remoteView.center)
-            }
-            
-            micImage.tintColor = .white
-            micImage.image = UIImage(systemName: "mic.slash.fill")
-        }
+        
+        self.viewModel.agoraManager.localView = localView
+        self.viewModel.agoraManager.remoteView = remoteView
     }
     
     private func createConstraints() {
+        remoteView.snp.makeConstraints { make in
+            make.size.equalToSuperview()
+        }
+        
         localView.snp.makeConstraints { make in
             make.width.equalToSuperview().dividedBy(3)
             make.height.equalTo(localView.snp.width).multipliedBy(1.33)
@@ -170,7 +166,7 @@ class VideoCallViewController: UIViewController {
         }
     }
     
-    private func setupButtons() {
+    func setupButtons() {
         var buttonConfig = UIButton.Configuration.filled()
         buttonConfig.cornerStyle = .capsule
         
@@ -184,20 +180,13 @@ class VideoCallViewController: UIViewController {
         micButton.tintColor = .white
         endCallButton.tintColor = .red
         
-        let camOnImage = UIImage(systemName: "video.fill")
-        let camOffImage = UIImage(systemName: "video.slash.fill")
-        let micOnImage = UIImage(systemName: "mic.fill")
-        let micOffImage = UIImage(systemName: "mic.slash.fill")
         let switchCamImage = UIImage(systemName: "camera.rotate.fill")
         let endCallImage = UIImage(systemName: "phone.down.fill")
         
-        let camImage = viewModel.isCameraEnabled ? camOnImage : camOffImage
-        let micImage = viewModel.isMicOn ? micOnImage : micOffImage
-        
-        camButton.setImage(camImage, for: .normal)
         switchCameraButton.setImage(switchCamImage, for: .normal)
-        micButton.setImage(micImage, for: .normal)
         endCallButton.setImage(endCallImage, for: .normal)
+        
+        changeButtonIcons(mic: .micOn, video: .videoOn)
         
         camButton.addTarget(self, action: #selector(toggleCamera), for: .touchUpInside)
         switchCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
@@ -207,22 +196,52 @@ class VideoCallViewController: UIViewController {
     
     //MARK: - Button Actions
     @objc func toggleCamera() {
-        viewModel.toggleCamera()
-        setupButtons()
-        localView.isHidden = !viewModel.isCameraEnabled
+        viewModel.agoraManager.toggleCamera()
     }
     
     @objc func switchCamera() {
-        viewModel.switchCamera()
+        viewModel.agoraManager.switchCamera()
     }
     
     @objc func toggleMic() {
-        viewModel.toggleMic()
-        setupButtons()
+        viewModel.agoraManager.toggleMic()
+    }
+}
+
+extension VideoCallViewController: VideoCallView {
+    @objc func endCall() {
+        viewModel.onViewDidDisappear()
+        navigationController?.popViewController(animated: true)
     }
     
-    @objc func endCall() {
-        viewModel.leaveChannel()
-        navigationController?.popViewController(animated: true)
+    func changeButtonIcons(mic: ButtonIconType?, video: ButtonIconType?) {
+        if let micIcon = mic?.icon {
+            micButton.setImage(micIcon, for: .normal)
+        }
+        if let videoIcon = video?.icon {
+            camButton.setImage(videoIcon, for: .normal)
+        }
+    }
+}
+
+//MARK: - AgoraDelegate
+extension VideoCallViewController: AgoraRtcEngineDelegate {
+    
+    // Callback called when a new host joins the channel
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+        viewModel.agoraManager.didJoinedOfUid(uid: uid)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason, elapsed: Int) {
+        viewModel.agoraManager.remoteVideoStatusChanged(state)
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState, reason: AgoraAudioRemoteReason, elapsed: Int) {
+        viewModel.agoraManager.remoteAudioStatusChanged(state)
+    }
+    
+    //When remote user leaves the channel.
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+            endCall()
     }
 }

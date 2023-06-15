@@ -16,7 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         let navigation = UINavigationController()
-        let landingVC = LandingViewController(viewModel: LandingViewModel())
+        let deviceAuth = DeviceAuthManager()
+        let networkManager = ReachabilityManager()
+        let viewModel = LandingViewModelImpl(deviceAuthManager: deviceAuth,
+                                             reachabilityManager: networkManager)
+        let landingVC = LandingViewController(viewModel: viewModel)
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground

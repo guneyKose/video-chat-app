@@ -7,58 +7,56 @@
 
 import Foundation
 import AVFoundation
-import UIKit
 
-protocol LandingViewModelProtocol {
+protocol LandingViewModel {
+    var view: LandingView? { get set }
     var pageTitle: String { get }
     var titleText: String { get }
     var placeholderText: String { get }
     var buttonTitle: String { get }
-    var storyboardName: String { get }
-    var delegate: LandingProtocol? { get set }
+    var deviceAuthManager: DeviceAuthManager { get set }
+    var networkManager: NetworkControl { get set }
     
     func requestCameraAndMicrophonePermission(completion: @escaping (Bool) -> Void)
     func checkUserInput(input: String?, range: NSRange, string: String) -> Bool
     func onStartCall(input: String?)
-    func changeTextFieldBorderColor(input: String) -> CGColor
+    func usernameChanged(input: String)
 }
 
-final class LandingViewModel: LandingViewModelProtocol {
+final class LandingViewModelImpl: LandingViewModel {
+    
+    weak var view: LandingView?
+    var networkManager: NetworkControl
+    var deviceAuthManager: DeviceAuthManager
     let pageTitle: String
     let titleText: String
     let placeholderText: String
     let buttonTitle: String
-    let storyboardName: String
-    weak var delegate: LandingProtocol?
     
-    init() {
+    init(deviceAuthManager: DeviceAuthManager,
+         reachabilityManager: ReachabilityManager) {
         pageTitle = "Start a video chat"
         titleText = "Enter your username"
         placeholderText = "Username"
         buttonTitle = "Start Call"
-        storyboardName = "VideoCall"
+        self.deviceAuthManager = deviceAuthManager
+        self.networkManager = reachabilityManager
     }
     
     func requestCameraAndMicrophonePermission(completion: @escaping (Bool) -> Void) {
-        let cameraAuthorizationStatus =
-        AVCaptureDevice.authorizationStatus(for: .video)
-        let microphoneAuthorizationStatus =
-        AVAudioSession.sharedInstance().recordPermission
+        let cameraAuthorizationStatus = deviceAuthManager.authStatus(for: .video)
+        let microphoneAuthorizationStatus = deviceAuthManager.recordPermission()
         
         switch cameraAuthorizationStatus {
         case .authorized:
             switch microphoneAuthorizationStatus {
-            case .granted:
+            case .authorized:
                 DispatchQueue.main.async {
                     completion(true)
                 }
-            case .denied, .undetermined:
+            case .denied, .notDetermined, .restricted:
                 AVAudioSession.sharedInstance().requestRecordPermission { granted in
                     completion(granted)
-                }
-            @unknown default:
-                DispatchQueue.main.async {
-                    completion(false)
                 }
             }
         case .denied, .restricted:
@@ -66,22 +64,18 @@ final class LandingViewModel: LandingViewModelProtocol {
                 completion(false)
             }
         case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { granted in
+            deviceAuthManager.requestAccess(for: .video) { granted in
                 if granted {
                     switch microphoneAuthorizationStatus {
-                    case .granted:
+                    case .authorized:
                         DispatchQueue.main.async {
                             completion(true)
                         }
-                    case .denied, .undetermined:
+                    case .denied, .notDetermined, .restricted:
                         AVAudioSession.sharedInstance().requestRecordPermission { granted in
                             DispatchQueue.main.async {
                                 completion(granted)
                             }
-                        }
-                    @unknown default:
-                        DispatchQueue.main.async {
-                            completion(false)
                         }
                     }
                 } else {
@@ -89,10 +83,6 @@ final class LandingViewModel: LandingViewModelProtocol {
                         completion(false)
                     }
                 }
-            }
-        @unknown default:
-            DispatchQueue.main.async {
-                completion(false)
             }
         }
     }
@@ -121,27 +111,27 @@ final class LandingViewModel: LandingViewModelProtocol {
         if input.count > 2 {
             requestCameraAndMicrophonePermission { granted in
                 if granted {
-                    if ReachabilityManager.isConnectedToNetwork() {
-                        self.delegate?.navigateToVideoCall()
+                    if self.networkManager.isConnectedToNetwork() {
+                        self.view?.navigateToVideoCall()
                     } else {
-                        self.delegate?.showAlert(type: .noInternetConnection)
+                        self.view?.showAlert(type: .noInternetConnection)
                     }
                 } else {
-                    self.delegate?.showAlert(type: .needPermission)
+                    self.view?.showAlert(type: .needPermission)
                 }
             }
         } else if input.count == 0 {
-            self.delegate?.showAlert(type: .enterUsername)
+            self.view?.showAlert(type: .enterUsername)
         } else {
-            self.delegate?.showAlert(type: .tooShort)
+            self.view?.showAlert(type: .tooShort)
         }
     }
     
-    func changeTextFieldBorderColor(input: String) -> CGColor {
+    func usernameChanged(input: String) {
         if input.count > 2 {
-            return UIColor.green.cgColor
+            view?.changeTextFieldBorderColor(validation: .valid)
         } else {
-            return UIColor.red.cgColor
+            view?.changeTextFieldBorderColor(validation: .invalid)
         }
     }
 }

@@ -8,13 +8,26 @@
 import UIKit
 import SnapKit
 
-protocol LandingProtocol: AnyObject {
+enum UsernameValidation {
+    case valid, invalid
+    var color: UIColor {
+        switch self {
+        case .valid:
+            return .green
+        case .invalid:
+            return .red
+        }
+    }
+}
+
+protocol LandingView: AnyObject {
     func showAlert(type: AlertManager)
     func navigateToVideoCall()
+    func changeTextFieldBorderColor(validation: UsernameValidation)
 }
 
 class LandingViewController: UIViewController {
-    var viewModel: LandingViewModelProtocol!
+    var viewModel: LandingViewModel!
     var mainTitleLabel: UILabel!
     var usernameTextField: UITextField!
     var startCallButton: UIButton!
@@ -23,10 +36,10 @@ class LandingViewController: UIViewController {
         super.init(coder: coder)
     }
     
-    init(viewModel: LandingViewModelProtocol) {
+    init(viewModel: LandingViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
-        self.viewModel.delegate = self
+        self.viewModel.view = self
     }
     
     override func viewDidLoad() {
@@ -94,20 +107,27 @@ class LandingViewController: UIViewController {
 }
 
 //MARK: - LandingProtocol
-extension LandingViewController: LandingProtocol {
+extension LandingViewController: LandingView {
     func showAlert(type: AlertManager) {
         let alert = type.alert
         self.present(alert, animated: true)
     }
     
     func navigateToVideoCall() {
-        let vc = VideoCallViewController(viewModel: VideoCallViewModel())
+        let agoraManager = AgoraManagerImpl()
+        let viewModel = VideoCallViewModelImpl(agoraManager: agoraManager)
+        let vc = VideoCallViewController(viewModel: viewModel)
+        
         UIView.transition(with: self.navigationController!.view,
                           duration: 0.3,
                           options: .transitionFlipFromRight,
                           animations: {
             self.navigationController?.pushViewController(vc, animated: false)
         }, completion: nil)
+    }
+    
+    func changeTextFieldBorderColor(validation: UsernameValidation) {
+        usernameTextField.layer.borderColor = validation.color.cgColor
     }
 }
 
@@ -120,7 +140,7 @@ extension LandingViewController: UITextFieldDelegate {
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        textField.layer.borderColor = viewModel.changeTextFieldBorderColor(input: textField.text ?? "")
+        viewModel.usernameChanged(input: textField.text ?? "")
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
