@@ -10,14 +10,20 @@ import Foundation
 protocol VideoCallViewModel {
     var view: VideoCallView? { get set }
     var agoraManager: AgoraManager { get set }
+    var username: String? { get set }
+    var isMessageInputOpen: Bool { get set }
     
     func onViewDidLoad()
     func onViewDidDisappear()
+    func messageTapped()
 }
 
 final class VideoCallViewModelImpl: VideoCallViewModel {
-    var agoraManager: AgoraManager
+    
     weak var view: VideoCallView?
+    var agoraManager: AgoraManager
+    var username: String?
+    var isMessageInputOpen: Bool = false
     
     init(agoraManager: AgoraManager) {
         self.agoraManager = agoraManager
@@ -31,5 +37,10 @@ final class VideoCallViewModelImpl: VideoCallViewModel {
     
     func onViewDidDisappear() {
         agoraManager.leaveChannel()
+    }
+    
+    func messageTapped() {
+        isMessageInputOpen.toggle()
+        view?.toggleKeyboard(isMessageInputOpen)
     }
 }

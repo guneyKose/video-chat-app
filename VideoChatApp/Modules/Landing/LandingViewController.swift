@@ -117,7 +117,7 @@ extension LandingViewController: LandingView {
         let agoraManager = AgoraManagerImpl()
         let viewModel = VideoCallViewModelImpl(agoraManager: agoraManager)
         let vc = VideoCallViewController(viewModel: viewModel)
-        
+        vc.viewModel.username = usernameTextField.text
         UIView.transition(with: self.navigationController!.view,
                           duration: 0.3,
                           options: .transitionFlipFromRight,

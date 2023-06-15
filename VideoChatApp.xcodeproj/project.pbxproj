@@ -20,6 +20,8 @@
 		309980EB2A30B20D009CB536 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 309980EA2A30B20D009CB536 /* SnapKit */; };
 		309980EE2A30B264009CB536 /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = 309980ED2A30B264009CB536 /* RtcBasic */; };
 		309980F12A30BE94009CB536 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980F02A30BE94009CB536 /* AlertManager.swift */; };
+		30CAC92C2A3B44C900DC1E9A /* AgoraRtmKit in Frameworks */ = {isa = PBXBuildFile; productRef = 30CAC92B2A3B44C900DC1E9A /* AgoraRtmKit */; };
+		30CAC92F2A3B4B3300DC1E9A /* MessageInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CAC92E2A3B4B3300DC1E9A /* MessageInputBar.swift */; };
 		30E507912A31BD3000CB507D /* ID++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507902A31BD3000CB507D /* ID++.swift */; };
 		30E507932A31D3FB00CB507D /* UIView++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507922A31D3FB00CB507D /* UIView++.swift */; };
 		30E507982A31DB4C00CB507D /* AgoraKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507972A31DB4C00CB507D /* AgoraKey.swift */; };
@@ -39,6 +41,7 @@
 		309980E02A30A793009CB536 /* VideoCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewController.swift; sourceTree = "<group>"; };
 		309980E22A30A7A5009CB536 /* VideoCallViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewModelImpl.swift; sourceTree = "<group>"; };
 		309980F02A30BE94009CB536 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		30CAC92E2A3B4B3300DC1E9A /* MessageInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputBar.swift; sourceTree = "<group>"; };
 		30E507902A31BD3000CB507D /* ID++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ID++.swift"; sourceTree = "<group>"; };
 		30E507922A31D3FB00CB507D /* UIView++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView++.swift"; sourceTree = "<group>"; };
 		30E507972A31DB4C00CB507D /* AgoraKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraKey.swift; sourceTree = "<group>"; };
@@ -50,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30CAC92C2A3B44C900DC1E9A /* AgoraRtmKit in Frameworks */,
 				309980EB2A30B20D009CB536 /* SnapKit in Frameworks */,
 				309980EE2A30B264009CB536 /* RtcBasic in Frameworks */,
 			);
@@ -135,6 +139,7 @@
 		309980DD2A30A718009CB536 /* VideoCall */ = {
 			isa = PBXGroup;
 			children = (
+				30CAC92D2A3B4B0D00DC1E9A /* MessageInputBar */,
 				309980E02A30A793009CB536 /* VideoCallViewController.swift */,
 				309980E22A30A7A5009CB536 /* VideoCallViewModelImpl.swift */,
 			);
@@ -158,6 +163,14 @@
 				305B57402A3A00B8000AD888 /* AgoraManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		30CAC92D2A3B4B0D00DC1E9A /* MessageInputBar */ = {
+			isa = PBXGroup;
+			children = (
+				30CAC92E2A3B4B3300DC1E9A /* MessageInputBar.swift */,
+			);
+			path = MessageInputBar;
 			sourceTree = "<group>";
 		};
 		30E5078F2A31BD2000CB507D /* Extensions */ = {
@@ -188,6 +201,7 @@
 			packageProductDependencies = (
 				309980EA2A30B20D009CB536 /* SnapKit */,
 				309980ED2A30B264009CB536 /* RtcBasic */,
+				30CAC92B2A3B44C900DC1E9A /* AgoraRtmKit */,
 			);
 			productName = VideoChatApp;
 			productReference = 309980C02A30A645009CB536 /* VideoChatApp.app */;
@@ -220,6 +234,7 @@
 			packageReferences = (
 				309980E92A30B20D009CB536 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				309980EC2A30B264009CB536 /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */,
+				30CAC92A2A3B44C900DC1E9A /* XCRemoteSwiftPackageReference "AgoraRtm_iOS" */,
 			);
 			productRefGroup = 309980C12A30A645009CB536 /* Products */;
 			projectDirPath = "";
@@ -251,6 +266,7 @@
 				30E507912A31BD3000CB507D /* ID++.swift in Sources */,
 				309980E32A30A7A5009CB536 /* VideoCallViewModelImpl.swift in Sources */,
 				305B57412A3A00B8000AD888 /* AgoraManager.swift in Sources */,
+				30CAC92F2A3B4B3300DC1E9A /* MessageInputBar.swift in Sources */,
 				30E507932A31D3FB00CB507D /* UIView++.swift in Sources */,
 				309980E12A30A793009CB536 /* VideoCallViewController.swift in Sources */,
 				3041D6302A36F53E0035FD9C /* ReachabilityManager.swift in Sources */,
@@ -488,6 +504,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		30CAC92A2A3B44C900DC1E9A /* XCRemoteSwiftPackageReference "AgoraRtm_iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AgoraIO/AgoraRtm_iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -500,6 +524,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 309980EC2A30B264009CB536 /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */;
 			productName = RtcBasic;
+		};
+		30CAC92B2A3B44C900DC1E9A /* AgoraRtmKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30CAC92A2A3B44C900DC1E9A /* XCRemoteSwiftPackageReference "AgoraRtm_iOS" */;
+			productName = AgoraRtmKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

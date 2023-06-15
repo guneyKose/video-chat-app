@@ -29,6 +29,7 @@ enum ButtonIconType {
 protocol VideoCallView: AnyObject {
     func endCall()
     func changeButtonIcons(mic: ButtonIconType?, video: ButtonIconType?)
+    func toggleKeyboard(_ open: Bool)
 }
 
 class VideoCallViewController: UIViewController {
@@ -41,10 +42,13 @@ class VideoCallViewController: UIViewController {
     var controlView: UIView!
     var micButton: UIButton!
     var camButton: UIButton!
+    var messageButton: UIButton!
     var endCallButton: UIButton!
     var switchCameraButton: UIButton!
     var buttonStack: UIStackView!
     var informUserLabel: UILabel!
+    var chatTableView: UITableView!
+    var messageInputBar: MessageInputBar!
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -68,7 +72,7 @@ class VideoCallViewController: UIViewController {
     }
     
     private func setupUI() {
-        remoteView = UIView(frame: view.frame)
+        remoteView = UIView()
         localView = UIView()
         loadingIcon = UIActivityIndicatorView()
         controlView = UIView()
@@ -78,13 +82,19 @@ class VideoCallViewController: UIViewController {
         camButton = UIButton()
         switchCameraButton = UIButton()
         informUserLabel = UILabel()
+        messageButton = UIButton()
+        chatTableView = UITableView()
+        messageInputBar = MessageInputBar(frame: .zero)
         
         view.addSubview(remoteView)
         view.addSubview(localView)
         view.addSubview(controlView)
+        view.addSubview(messageInputBar)
         remoteView.addSubview(loadingIcon)
         remoteView.addSubview(informUserLabel)
+        remoteView.addSubview(chatTableView)
         controlView.addSubview(buttonStack)
+        buttonStack.addArrangedSubview(messageButton)
         buttonStack.addArrangedSubview(camButton)
         buttonStack.addArrangedSubview(switchCameraButton)
         buttonStack.addArrangedSubview(micButton)
@@ -115,6 +125,10 @@ class VideoCallViewController: UIViewController {
         informUserLabel.textColor = .label
         informUserLabel.textAlignment = .center
         informUserLabel.text = "Waiting for the other user..."
+        
+        chatTableView.backgroundColor = .red
+        chatTableView.isHidden = true
+        messageInputBar.isHidden = true
         
         self.viewModel.agoraManager.localView = localView
         self.viewModel.agoraManager.remoteView = remoteView
@@ -160,9 +174,26 @@ class VideoCallViewController: UIViewController {
             make.size.equalTo(camButton)
         }
         
+        messageButton.snp.makeConstraints { make in
+            make.size.equalTo(endCallButton)
+        }
+        
         informUserLabel.snp.makeConstraints { make in
             make.top.equalTo(loadingIcon.snp.bottom).offset(30)
             make.width.equalToSuperview()
+        }
+        
+        messageInputBar.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(50)
+            make.bottom.equalTo(controlView.snp.top).offset(-24)
+        }
+        
+        chatTableView.snp.makeConstraints { make in
+            make.width.equalToSuperview().dividedBy(2)
+            make.height.equalTo(200)
+            make.leading.equalToSuperview().offset(24)
+            make.bottom.equalTo(messageInputBar.snp.top)
         }
     }
     
@@ -174,17 +205,21 @@ class VideoCallViewController: UIViewController {
         switchCameraButton.configuration = buttonConfig
         micButton.configuration = buttonConfig
         endCallButton.configuration = buttonConfig
+        messageButton.configuration = buttonConfig
         
         camButton.tintColor = .white
         switchCameraButton.tintColor = .white
         micButton.tintColor = .white
         endCallButton.tintColor = .red
+        messageButton.tintColor = .white
         
         let switchCamImage = UIImage(systemName: "camera.rotate.fill")
         let endCallImage = UIImage(systemName: "phone.down.fill")
+        let messageImage = UIImage(systemName: "message.fill")
         
         switchCameraButton.setImage(switchCamImage, for: .normal)
         endCallButton.setImage(endCallImage, for: .normal)
+        messageButton.setImage(messageImage, for: .normal)
         
         changeButtonIcons(mic: .micOn, video: .videoOn)
         
@@ -192,6 +227,7 @@ class VideoCallViewController: UIViewController {
         switchCameraButton.addTarget(self, action: #selector(switchCamera), for: .touchUpInside)
         micButton.addTarget(self, action: #selector(toggleMic), for: .touchUpInside)
         endCallButton.addTarget(self, action: #selector(endCall), for: .touchUpInside)
+        messageButton.addTarget(self, action: #selector(messageTapped), for: .touchUpInside)
     }
     
     //MARK: - Button Actions
@@ -205,6 +241,11 @@ class VideoCallViewController: UIViewController {
     
     @objc func toggleMic() {
         viewModel.agoraManager.toggleMic()
+    }
+    
+    @objc func messageTapped() {
+        viewModel.messageTapped()
+        messageInputBar.chatTextField.becomeFirstResponder()
     }
 }
 
@@ -221,6 +262,11 @@ extension VideoCallViewController: VideoCallView {
         if let videoIcon = video?.icon {
             camButton.setImage(videoIcon, for: .normal)
         }
+    }
+    
+    func toggleKeyboard(_ open: Bool) {
+        chatTableView.isHidden = !open
+        messageInputBar.isHidden = !open
     }
 }
 
