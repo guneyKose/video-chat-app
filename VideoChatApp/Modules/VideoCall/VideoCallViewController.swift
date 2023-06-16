@@ -30,6 +30,11 @@ protocol VideoCallView: AnyObject {
     func endCall()
     func changeButtonIcons(mic: ButtonIconType?, video: ButtonIconType?)
     func toggleKeyboard(_ open: Bool)
+    func keyboardDidDismiss()
+    func keyboardDidShown()
+    func sendMessage(message: String)
+    func hideChat(_ hide: Bool)
+    func reloadChat()
 }
 
 class VideoCallViewController: UIViewController {
@@ -86,6 +91,8 @@ class VideoCallViewController: UIViewController {
         chatTableView = UITableView()
         messageInputBar = MessageInputBar(frame: .zero)
         
+        messageInputBar.view = self
+        
         view.addSubview(remoteView)
         view.addSubview(localView)
         view.addSubview(controlView)
@@ -126,9 +133,14 @@ class VideoCallViewController: UIViewController {
         informUserLabel.textAlignment = .center
         informUserLabel.text = "Waiting for the other user..."
         
-        chatTableView.backgroundColor = .red
         chatTableView.isHidden = true
+        chatTableView.delegate = self
+        chatTableView.dataSource = self
+        chatTableView.backgroundColor = .clear
+        chatTableView.showsVerticalScrollIndicator = false
+        chatTableView.separatorStyle = .none
         messageInputBar.isHidden = true
+        chatTableView.register(ChatTableViewCell.self, forCellReuseIdentifier: "ChatTableViewCell")
         
         self.viewModel.agoraManager.localView = localView
         self.viewModel.agoraManager.remoteView = remoteView
@@ -186,14 +198,13 @@ class VideoCallViewController: UIViewController {
         messageInputBar.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(50)
-            make.bottom.equalTo(controlView.snp.top).offset(-24)
+            make.bottom.equalToSuperview().offset(-(viewModel.keyboardHeight ?? 0))
         }
         
         chatTableView.snp.makeConstraints { make in
             make.width.equalToSuperview().dividedBy(2)
             make.height.equalTo(200)
-            make.leading.equalToSuperview().offset(24)
-            make.bottom.equalTo(messageInputBar.snp.top)
+            make.leading.equalToSuperview()
         }
     }
     
@@ -250,6 +261,7 @@ class VideoCallViewController: UIViewController {
 }
 
 extension VideoCallViewController: VideoCallView {
+    
     @objc func endCall() {
         viewModel.onViewDidDisappear()
         navigationController?.popViewController(animated: true)
@@ -265,14 +277,45 @@ extension VideoCallViewController: VideoCallView {
     }
     
     func toggleKeyboard(_ open: Bool) {
-        chatTableView.isHidden = !open
         messageInputBar.isHidden = !open
+        if open {
+            chatTableView.isHidden = false
+            chatTableView.center = CGPoint(x: chatTableView.center.x,
+                                           y: messageInputBar.frame.minY - 10 - chatTableView.frame.height / 2)
+            
+        } else {
+            chatTableView.center = CGPoint(x: chatTableView.center.x,
+                                           y: controlView.frame.minY - 10 - chatTableView.frame.height / 2)
+        }
+        UIView.animate(withDuration: 0.2) {
+            self.chatTableView.layoutIfNeeded()
+        }
+    }
+    
+    func keyboardDidDismiss() {
+        toggleKeyboard(false)
+    }
+    
+    func keyboardDidShown() {
+        toggleKeyboard(true)
+    }
+    
+    func sendMessage(message: String) {
+        viewModel.sendMessage(message)
+    }
+    
+    func hideChat(_ hide: Bool) {
+        chatTableView.isHidden = hide
+    }
+    
+    func reloadChat() {
+        chatTableView.reloadData()
+        chatTableView.scrollToRow(at: IndexPath(row: viewModel.messages.count - 1, section: 0), at: .bottom, animated: true)
     }
 }
 
 //MARK: - AgoraDelegate
 extension VideoCallViewController: AgoraRtcEngineDelegate {
-    
     // Callback called when a new host joins the channel
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
         viewModel.agoraManager.didJoinedOfUid(uid: uid)
@@ -289,5 +332,19 @@ extension VideoCallViewController: AgoraRtcEngineDelegate {
     //When remote user leaves the channel.
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
             endCall()
+    }
+}
+
+extension VideoCallViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.messages.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatTableViewCell", for: indexPath) as? ChatTableViewCell
+        else { fatalError("ChatTableViewCell") }
+        let message = viewModel.messages[indexPath.row]
+        cell.setupCell(message: message)
+        return cell
     }
 }

@@ -20,6 +20,8 @@
 		309980EB2A30B20D009CB536 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 309980EA2A30B20D009CB536 /* SnapKit */; };
 		309980EE2A30B264009CB536 /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = 309980ED2A30B264009CB536 /* RtcBasic */; };
 		309980F12A30BE94009CB536 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980F02A30BE94009CB536 /* AlertManager.swift */; };
+		30AF0CD42A3C69B800AD5A5D /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AF0CD32A3C69B800AD5A5D /* ChatTableViewCell.swift */; };
+		30AF0CD92A3C6E6300AD5A5D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AF0CD82A3C6E6300AD5A5D /* Message.swift */; };
 		30CAC92C2A3B44C900DC1E9A /* AgoraRtmKit in Frameworks */ = {isa = PBXBuildFile; productRef = 30CAC92B2A3B44C900DC1E9A /* AgoraRtmKit */; };
 		30CAC92F2A3B4B3300DC1E9A /* MessageInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CAC92E2A3B4B3300DC1E9A /* MessageInputBar.swift */; };
 		30E507912A31BD3000CB507D /* ID++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30E507902A31BD3000CB507D /* ID++.swift */; };
@@ -41,6 +43,8 @@
 		309980E02A30A793009CB536 /* VideoCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewController.swift; sourceTree = "<group>"; };
 		309980E22A30A7A5009CB536 /* VideoCallViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewModelImpl.swift; sourceTree = "<group>"; };
 		309980F02A30BE94009CB536 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		30AF0CD32A3C69B800AD5A5D /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
+		30AF0CD82A3C6E6300AD5A5D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		30CAC92E2A3B4B3300DC1E9A /* MessageInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputBar.swift; sourceTree = "<group>"; };
 		30E507902A31BD3000CB507D /* ID++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ID++.swift"; sourceTree = "<group>"; };
 		30E507922A31D3FB00CB507D /* UIView++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView++.swift"; sourceTree = "<group>"; };
@@ -85,6 +89,7 @@
 				30E5078F2A31BD2000CB507D /* Extensions */,
 				309980D72A30A68C009CB536 /* Application */,
 				309980D82A30A699009CB536 /* Modules */,
+				30AF0CD52A3C6BC300AD5A5D /* Models */,
 				309980EF2A30BE7C009CB536 /* Managers */,
 				309980D92A30A6A7009CB536 /* UI */,
 				309980DA2A30A6BA009CB536 /* Resources */,
@@ -139,6 +144,7 @@
 		309980DD2A30A718009CB536 /* VideoCall */ = {
 			isa = PBXGroup;
 			children = (
+				30AF0CD12A3C5EF000AD5A5D /* TableViewItems */,
 				30CAC92D2A3B4B0D00DC1E9A /* MessageInputBar */,
 				309980E02A30A793009CB536 /* VideoCallViewController.swift */,
 				309980E22A30A7A5009CB536 /* VideoCallViewModelImpl.swift */,
@@ -163,6 +169,30 @@
 				305B57402A3A00B8000AD888 /* AgoraManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		30AF0CD12A3C5EF000AD5A5D /* TableViewItems */ = {
+			isa = PBXGroup;
+			children = (
+				30AF0CD22A3C699000AD5A5D /* ChatTableCell */,
+			);
+			path = TableViewItems;
+			sourceTree = "<group>";
+		};
+		30AF0CD22A3C699000AD5A5D /* ChatTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				30AF0CD32A3C69B800AD5A5D /* ChatTableViewCell.swift */,
+			);
+			path = ChatTableCell;
+			sourceTree = "<group>";
+		};
+		30AF0CD52A3C6BC300AD5A5D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				30AF0CD82A3C6E6300AD5A5D /* Message.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		30CAC92D2A3B4B0D00DC1E9A /* MessageInputBar */ = {
@@ -273,6 +303,8 @@
 				30E507982A31DB4C00CB507D /* AgoraKey.swift in Sources */,
 				309980C82A30A645009CB536 /* LandingViewController.swift in Sources */,
 				309980C42A30A645009CB536 /* AppDelegate.swift in Sources */,
+				30AF0CD42A3C69B800AD5A5D /* ChatTableViewCell.swift in Sources */,
+				30AF0CD92A3C6E6300AD5A5D /* Message.swift in Sources */,
 				309980DF2A30A754009CB536 /* LandingViewModelImpl.swift in Sources */,
 				309980F12A30BE94009CB536 /* AlertManager.swift in Sources */,
 			);

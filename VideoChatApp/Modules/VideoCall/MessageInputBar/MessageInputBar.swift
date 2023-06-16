@@ -30,6 +30,27 @@ class MessageInputBar: UIView {
         return button
     }()
     
+    var timer: Timer?
+    
+    weak var view: VideoCallView?
+    
+    var isKeyboardOn: Bool = true {
+        didSet {
+            if !isKeyboardOn {
+                timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+                    self.view?.hideChat(true)
+                    timer.invalidate()
+                    self.timer = nil
+                }
+            } else {
+                timer?.invalidate()
+                timer = nil
+            }
+        }
+    }
+    
+    var keyboardHeight: CGFloat = .zero
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -48,12 +69,13 @@ class MessageInputBar: UIView {
         sendMessageButton.addTarget(self,
                                     action: #selector(sendMessage),
                                     for: .touchUpInside)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func createConstraints() {
         chatTextField.snp.makeConstraints { make in
-            make.width.equalToSuperview().offset(-60)
+            make.width.equalToSuperview().offset(-70)
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().offset(10)
         }
@@ -67,14 +89,14 @@ class MessageInputBar: UIView {
     }
     
     @objc func sendMessage() {
-        debugPrint(chatTextField.text ?? "")
+        if !chatTextField.hasText { return }
+        view?.sendMessage(message: chatTextField.text ?? "")
         chatTextField.text = ""
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight = keyboardSize.height
-        }
+    @objc func keyboardDidHide(notification: NSNotification) {
+        view?.keyboardDidDismiss()
+        isKeyboardOn = false
     }
 }
 
@@ -84,7 +106,8 @@ extension MessageInputBar: UITextFieldDelegate {
         return true
     }
     
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        view?.keyboardDidShown()
+        isKeyboardOn = true
     }
 }

@@ -31,6 +31,7 @@ class LandingViewController: UIViewController {
     var mainTitleLabel: UILabel!
     var usernameTextField: UITextField!
     var startCallButton: UIButton!
+    var keyboardHeight: CGFloat?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -49,6 +50,8 @@ class LandingViewController: UIViewController {
     
     //MARK: - SetUp UI
     private func setupUI() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
         self.navigationItem.title = viewModel.pageTitle
         self.navigationController?.navigationBar.prefersLargeTitles = true
         
@@ -104,6 +107,12 @@ class LandingViewController: UIViewController {
     @objc func startCall() {
         self.viewModel.onStartCall(input: usernameTextField.text)
     }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardSize.height
+        }
+    }
 }
 
 //MARK: - LandingProtocol
@@ -118,6 +127,7 @@ extension LandingViewController: LandingView {
         let viewModel = VideoCallViewModelImpl(agoraManager: agoraManager)
         let vc = VideoCallViewController(viewModel: viewModel)
         vc.viewModel.username = usernameTextField.text
+        vc.viewModel.keyboardHeight = self.keyboardHeight
         UIView.transition(with: self.navigationController!.view,
                           duration: 0.3,
                           options: .transitionFlipFromRight,
