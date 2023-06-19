@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		3041D6302A36F53E0035FD9C /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3041D62F2A36F53E0035FD9C /* ReachabilityManager.swift */; };
 		305B573F2A39CD8A000AD888 /* DeviceAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305B573E2A39CD8A000AD888 /* DeviceAuthManager.swift */; };
-		305B57412A3A00B8000AD888 /* AgoraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305B57402A3A00B8000AD888 /* AgoraManager.swift */; };
+		305B57412A3A00B8000AD888 /* VideoCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305B57402A3A00B8000AD888 /* VideoCallManager.swift */; };
 		309980C42A30A645009CB536 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980C32A30A645009CB536 /* AppDelegate.swift */; };
 		309980C82A30A645009CB536 /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980C72A30A645009CB536 /* LandingViewController.swift */; };
 		309980CD2A30A647009CB536 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 309980CC2A30A647009CB536 /* Assets.xcassets */; };
@@ -20,6 +20,7 @@
 		309980EB2A30B20D009CB536 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 309980EA2A30B20D009CB536 /* SnapKit */; };
 		309980EE2A30B264009CB536 /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = 309980ED2A30B264009CB536 /* RtcBasic */; };
 		309980F12A30BE94009CB536 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980F02A30BE94009CB536 /* AlertManager.swift */; };
+		309BCF352A4039C800A43264 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309BCF342A4039C800A43264 /* ChatManager.swift */; };
 		30AF0CD42A3C69B800AD5A5D /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AF0CD32A3C69B800AD5A5D /* ChatTableViewCell.swift */; };
 		30AF0CD92A3C6E6300AD5A5D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AF0CD82A3C6E6300AD5A5D /* Message.swift */; };
 		30CAC92C2A3B44C900DC1E9A /* AgoraRtmKit in Frameworks */ = {isa = PBXBuildFile; productRef = 30CAC92B2A3B44C900DC1E9A /* AgoraRtmKit */; };
@@ -32,7 +33,7 @@
 /* Begin PBXFileReference section */
 		3041D62F2A36F53E0035FD9C /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		305B573E2A39CD8A000AD888 /* DeviceAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAuthManager.swift; sourceTree = "<group>"; };
-		305B57402A3A00B8000AD888 /* AgoraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraManager.swift; sourceTree = "<group>"; };
+		305B57402A3A00B8000AD888 /* VideoCallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallManager.swift; sourceTree = "<group>"; };
 		309980C02A30A645009CB536 /* VideoChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		309980C32A30A645009CB536 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		309980C72A30A645009CB536 /* LandingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +44,7 @@
 		309980E02A30A793009CB536 /* VideoCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewController.swift; sourceTree = "<group>"; };
 		309980E22A30A7A5009CB536 /* VideoCallViewModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewModelImpl.swift; sourceTree = "<group>"; };
 		309980F02A30BE94009CB536 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		309BCF342A4039C800A43264 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		30AF0CD32A3C69B800AD5A5D /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
 		30AF0CD82A3C6E6300AD5A5D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		30CAC92E2A3B4B3300DC1E9A /* MessageInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputBar.swift; sourceTree = "<group>"; };
@@ -166,7 +168,8 @@
 				309980F02A30BE94009CB536 /* AlertManager.swift */,
 				3041D62F2A36F53E0035FD9C /* ReachabilityManager.swift */,
 				305B573E2A39CD8A000AD888 /* DeviceAuthManager.swift */,
-				305B57402A3A00B8000AD888 /* AgoraManager.swift */,
+				305B57402A3A00B8000AD888 /* VideoCallManager.swift */,
+				309BCF342A4039C800A43264 /* ChatManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -295,10 +298,11 @@
 				305B573F2A39CD8A000AD888 /* DeviceAuthManager.swift in Sources */,
 				30E507912A31BD3000CB507D /* ID++.swift in Sources */,
 				309980E32A30A7A5009CB536 /* VideoCallViewModelImpl.swift in Sources */,
-				305B57412A3A00B8000AD888 /* AgoraManager.swift in Sources */,
+				305B57412A3A00B8000AD888 /* VideoCallManager.swift in Sources */,
 				30CAC92F2A3B4B3300DC1E9A /* MessageInputBar.swift in Sources */,
 				30E507932A31D3FB00CB507D /* UIView++.swift in Sources */,
 				309980E12A30A793009CB536 /* VideoCallViewController.swift in Sources */,
+				309BCF352A4039C800A43264 /* ChatManager.swift in Sources */,
 				3041D6302A36F53E0035FD9C /* ReachabilityManager.swift in Sources */,
 				30E507982A31DB4C00CB507D /* AgoraKey.swift in Sources */,
 				309980C82A30A645009CB536 /* LandingViewController.swift in Sources */,

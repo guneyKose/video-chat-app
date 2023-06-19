@@ -22,9 +22,18 @@ protocol DeviceAuth {
     func recordPermission() -> AuthStatus
     func authStatus(for media: DeviceType) -> AuthStatus
     func requestAccess(for media: DeviceType, _ completion: @escaping (Bool) -> Void)
+    func requestRecordPermission(_ completion: @escaping (Bool) -> Void)
 }
 
 class DeviceAuthManager: DeviceAuth {
+    
+    func requestRecordPermission(_ completion: @escaping (Bool) -> Void) {
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            DispatchQueue.main.async {
+                completion(granted)
+            }
+        }
+    }
     
     func recordPermission() -> AuthStatus {
         let auth = AVAudioSession.sharedInstance().recordPermission

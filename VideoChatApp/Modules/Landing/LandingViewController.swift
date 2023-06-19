@@ -123,11 +123,13 @@ extension LandingViewController: LandingView {
     }
     
     func navigateToVideoCall() {
-        let agoraManager = AgoraManagerImpl()
-        let viewModel = VideoCallViewModelImpl(agoraManager: agoraManager)
+        let agoraManager = VideoCallManagerImpl()
+        let chatManager = ChatManagerImpl()
+        let viewModel = VideoCallViewModelImpl(agoraManager: agoraManager,
+                                               chatManager: chatManager)
         let vc = VideoCallViewController(viewModel: viewModel)
         vc.viewModel.username = usernameTextField.text
-        vc.viewModel.keyboardHeight = self.keyboardHeight
+        vc.keyboardHeight = self.keyboardHeight
         UIView.transition(with: self.navigationController!.view,
                           duration: 0.3,
                           options: .transitionFlipFromRight,

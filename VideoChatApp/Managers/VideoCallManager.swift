@@ -1,5 +1,5 @@
 //
-//  AgoraManager.swift
+//  VideoCallManager.swift
 //  VideoChatApp
 //
 //  Created by Güney Köse on 14.06.2023.
@@ -8,7 +8,7 @@
 import Foundation
 import AgoraRtcKit
 
-protocol AgoraManager {
+protocol VideoCallManager {
     var view: VideoCallView? { get set }
     var agoraEngine: AgoraRtcEngineKit? { get set }
     var isCameraEnabled: Bool { get }
@@ -23,7 +23,7 @@ protocol AgoraManager {
     func toggleCamera()
     func switchCamera()
     func toggleMic()
-    func initializeAgoraEngine()
+    func initializeAgoraEngine(delegate: AgoraRtcEngineDelegate)
     func setupLocalVideo()
     func joinChannel()
     func leaveChannel()
@@ -32,7 +32,7 @@ protocol AgoraManager {
     func didJoinedOfUid(uid: UInt)
 }
 
-class AgoraManagerImpl: AgoraManager {
+class VideoCallManagerImpl: VideoCallManager {
     weak var view: VideoCallView?
     var agoraEngine: AgoraRtcEngineKit?
     var isCameraEnabled: Bool = true
@@ -52,14 +52,12 @@ class AgoraManagerImpl: AgoraManager {
         micImage.image = UIImage(systemName: "mic.slash.fill")
     }
     
-    func initializeAgoraEngine() {
-        guard let view = self.view as? AgoraRtcEngineDelegate
-        else { return }
+    func initializeAgoraEngine(delegate: AgoraRtcEngineDelegate) {
         let config = AgoraRtcEngineConfig()
         // Pass in your App ID here.
         config.appId = agoraAppID
         // Use AgoraRtcEngineDelegate for the following delegate parameter.
-        agoraEngine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: view)
+        agoraEngine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: delegate)
     }
     
     func toggleCamera() {

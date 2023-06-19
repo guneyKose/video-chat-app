@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import AgoraRtcKit
 
 enum ButtonIconType {
     case micOn, micOff, videoOn, videoOff
@@ -34,7 +33,7 @@ protocol VideoCallView: AnyObject {
     func keyboardDidShown()
     func sendMessage(message: String)
     func hideChat(_ hide: Bool)
-    func reloadChat()
+    func reloadChat(sender: Bool)
 }
 
 class VideoCallViewController: UIViewController {
@@ -54,6 +53,7 @@ class VideoCallViewController: UIViewController {
     var informUserLabel: UILabel!
     var chatTableView: UITableView!
     var messageInputBar: MessageInputBar!
+    var keyboardHeight: CGFloat?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -63,7 +63,8 @@ class VideoCallViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
         self.viewModel.view = self
-        self.viewModel.agoraManager.view = self
+        self.viewModel.videoCallManager.view = self
+        self.viewModel.chatManager.view = self
     }
     
     override func viewDidLoad() {
@@ -73,7 +74,7 @@ class VideoCallViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        viewModel.onViewDidDisappear()
+        viewModel.endCall()
     }
     
     private func setupUI() {
@@ -142,8 +143,8 @@ class VideoCallViewController: UIViewController {
         messageInputBar.isHidden = true
         chatTableView.register(ChatTableViewCell.self, forCellReuseIdentifier: "ChatTableViewCell")
         
-        self.viewModel.agoraManager.localView = localView
-        self.viewModel.agoraManager.remoteView = remoteView
+        self.viewModel.videoCallManager.localView = localView
+        self.viewModel.videoCallManager.remoteView = remoteView
     }
     
     private func createConstraints() {
@@ -198,7 +199,7 @@ class VideoCallViewController: UIViewController {
         messageInputBar.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(50)
-            make.bottom.equalToSuperview().offset(-(viewModel.keyboardHeight ?? 0))
+            make.bottom.equalToSuperview().offset(-(keyboardHeight ?? 0))
         }
         
         chatTableView.snp.makeConstraints { make in
@@ -243,15 +244,15 @@ class VideoCallViewController: UIViewController {
     
     //MARK: - Button Actions
     @objc func toggleCamera() {
-        viewModel.agoraManager.toggleCamera()
+        viewModel.videoCallManager.toggleCamera()
     }
     
     @objc func switchCamera() {
-        viewModel.agoraManager.switchCamera()
+        viewModel.videoCallManager.switchCamera()
     }
     
     @objc func toggleMic() {
-        viewModel.agoraManager.toggleMic()
+        viewModel.videoCallManager.toggleMic()
     }
     
     @objc func messageTapped() {
@@ -263,7 +264,7 @@ class VideoCallViewController: UIViewController {
 extension VideoCallViewController: VideoCallView {
     
     @objc func endCall() {
-        viewModel.onViewDidDisappear()
+        viewModel.endCall()
         navigationController?.popViewController(animated: true)
     }
     
@@ -308,30 +309,10 @@ extension VideoCallViewController: VideoCallView {
         chatTableView.isHidden = hide
     }
     
-    func reloadChat() {
+    func reloadChat(sender: Bool) {
         chatTableView.reloadData()
+        guard sender else { return }
         chatTableView.scrollToRow(at: IndexPath(row: viewModel.messages.count - 1, section: 0), at: .bottom, animated: true)
-    }
-}
-
-//MARK: - AgoraDelegate
-extension VideoCallViewController: AgoraRtcEngineDelegate {
-    // Callback called when a new host joins the channel
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        viewModel.agoraManager.didJoinedOfUid(uid: uid)
-    }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason, elapsed: Int) {
-        viewModel.agoraManager.remoteVideoStatusChanged(state)
-    }
-
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState, reason: AgoraAudioRemoteReason, elapsed: Int) {
-        viewModel.agoraManager.remoteAudioStatusChanged(state)
-    }
-    
-    //When remote user leaves the channel.
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-            endCall()
     }
 }
 

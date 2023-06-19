@@ -19,7 +19,7 @@ class MessageInputBar: UIView {
         return textField
     }()
     
-    var sendMessageButton: UIButton = {
+    private var sendMessageButton: UIButton = {
         let button = UIButton()
         let icon = UIImage(systemName: "paperplane.fill")
         var config = UIButton.Configuration.filled()

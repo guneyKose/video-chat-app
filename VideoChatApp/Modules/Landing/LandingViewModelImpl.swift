@@ -55,7 +55,7 @@ final class LandingViewModelImpl: LandingViewModel {
                     completion(true)
                 }
             case .denied, .notDetermined, .restricted:
-                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                deviceAuthManager.requestRecordPermission { granted in
                     completion(granted)
                 }
             }
@@ -72,10 +72,8 @@ final class LandingViewModelImpl: LandingViewModel {
                             completion(true)
                         }
                     case .denied, .notDetermined, .restricted:
-                        AVAudioSession.sharedInstance().requestRecordPermission { granted in
-                            DispatchQueue.main.async {
-                                completion(granted)
-                            }
+                        self.deviceAuthManager.requestRecordPermission { granted in
+                            completion(granted)
                         }
                     }
                 } else {
