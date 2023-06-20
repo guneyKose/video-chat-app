@@ -21,6 +21,8 @@ class ChatTableViewCell: UITableViewCell {
     
     func setupCell(message: Message) {
         textLabel?.text = "\(message.username) : \(message.message)"
+        textLabel?.shadowColor = .blue.withAlphaComponent(0.5)
+        textLabel?.shadowOffset = CGSize(width: 1, height: 1)
         self.backgroundColor = .clear
         self.selectionStyle = .none
     }

@@ -38,7 +38,9 @@ class MessageInputBar: UIView {
         didSet {
             if !isKeyboardOn {
                 timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
-                    self.view?.hideChat(true)
+                    if !self.isKeyboardOn {
+                        self.view?.hideChat(true)
+                    }
                     timer.invalidate()
                     self.timer = nil
                 }

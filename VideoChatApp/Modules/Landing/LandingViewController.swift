@@ -123,8 +123,8 @@ extension LandingViewController: LandingView {
     }
     
     func navigateToVideoCall() {
-        let agoraManager = VideoCallManagerImpl()
-        let chatManager = ChatManagerImpl()
+        let agoraManager = VideoCallTestManagerImpl()
+        let chatManager = ChatManagerTestImpl()
         let viewModel = VideoCallViewModelImpl(agoraManager: agoraManager,
                                                chatManager: chatManager)
         let vc = VideoCallViewController(viewModel: viewModel)

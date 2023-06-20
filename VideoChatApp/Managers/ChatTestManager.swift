@@ -1,33 +1,35 @@
 //
-//  ChatManager.swift
+//  ChatTestManager.swift
 //  VideoChatApp
 //
-//  Created by Güney Köse on 19.06.2023.
+//  Created by Güney Köse on 20.06.2023.
 //
 
 import Foundation
 import AgoraRtmKit
 
-protocol ChatManager {
-    var view: VideoCallView? { get set }
-    var kit: AgoraRtmKit? { get set }
-    var rtmChannel: AgoraRtmChannel? { get set }
-    
-    func createChannel(delegate: AgoraRtmChannelDelegate)
-    func login(username: String, delegate: AgoraRtmDelegate, _ completion: @escaping () -> Void)
-    func logout()
-    func send(message: Message, _ completion: @escaping (Bool) -> Void)
-    func messageReceived(message: Message)
-}
-
-class ChatManagerImpl: ChatManager {
-    
+class ChatManagerTestImpl: ChatManager {
     weak var view: VideoCallView?
     var rtmChannel: AgoraRtmChannel?
     var kit: AgoraRtmKit?
+    var timer: Timer?
     
     init() {
-        
+        timer = Timer.scheduledTimer(withTimeInterval: 4.9, repeats: true) { timer in
+            let message = Message(username: "jesus", message: "who dis?")
+            self.messageReceived(message: message)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                let msg = Message(username: "steve", message: "hello!")
+                self.send(message: msg) { sent in
+                    debugPrint("Message sent")
+                }
+            })
+        }
+    }
+    
+    deinit {
+        debugPrint("deinit works")
     }
     
     func login(username: String, delegate: AgoraRtmDelegate, _ completion: @escaping () -> Void) {
@@ -63,20 +65,21 @@ class ChatManagerImpl: ChatManager {
                 return
             }
         })
+        self.timer?.invalidate()
+        self.timer = nil
     }
     
     func send(message: Message, _ completion: @escaping (Bool) -> Void) {
         let rtmMessage = AgoraRtmMessage(text: message.message)
         
         rtmChannel?.send(rtmMessage) { (error) in
-            let sent = error == .errorOk ? true : false
+            let sent = error == .errorOk ? true : true
             completion(sent)
         }
     }
     
     func messageReceived(message: Message) {
+        debugPrint("messageReceived")
         view?.messageReceived(message: message)
     }
 }
-
-

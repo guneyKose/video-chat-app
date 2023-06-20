@@ -32,8 +32,9 @@ protocol VideoCallView: AnyObject {
     func keyboardDidDismiss()
     func keyboardDidShown()
     func sendMessage(message: String)
+    func messageReceived(message: Message)
     func hideChat(_ hide: Bool)
-    func reloadChat(sender: Bool)
+    func reloadChat()
 }
 
 class VideoCallViewController: UIViewController {
@@ -98,9 +99,9 @@ class VideoCallViewController: UIViewController {
         view.addSubview(localView)
         view.addSubview(controlView)
         view.addSubview(messageInputBar)
+        view.addSubview(chatTableView)
         remoteView.addSubview(loadingIcon)
         remoteView.addSubview(informUserLabel)
-        remoteView.addSubview(chatTableView)
         controlView.addSubview(buttonStack)
         buttonStack.addArrangedSubview(messageButton)
         buttonStack.addArrangedSubview(camButton)
@@ -137,7 +138,8 @@ class VideoCallViewController: UIViewController {
         chatTableView.isHidden = true
         chatTableView.delegate = self
         chatTableView.dataSource = self
-        chatTableView.backgroundColor = .clear
+        chatTableView.backgroundColor = .systemBackground.withAlphaComponent(0.25)
+        chatTableView.layer.cornerRadius = 8
         chatTableView.showsVerticalScrollIndicator = false
         chatTableView.separatorStyle = .none
         messageInputBar.isHidden = true
@@ -206,6 +208,7 @@ class VideoCallViewController: UIViewController {
             make.width.equalToSuperview().dividedBy(2)
             make.height.equalTo(200)
             make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
     }
     
@@ -279,6 +282,7 @@ extension VideoCallViewController: VideoCallView {
     
     func toggleKeyboard(_ open: Bool) {
         messageInputBar.isHidden = !open
+        viewModel.isMessageInputOpen = open
         if open {
             chatTableView.isHidden = false
             chatTableView.center = CGPoint(x: chatTableView.center.x,
@@ -305,14 +309,20 @@ extension VideoCallViewController: VideoCallView {
         viewModel.sendMessage(message)
     }
     
-    func hideChat(_ hide: Bool) {
-        chatTableView.isHidden = hide
+    func messageReceived(message: Message) {
+        viewModel.messageReceived(message)
     }
     
-    func reloadChat(sender: Bool) {
+    func hideChat(_ hide: Bool) {
+        chatTableView.isHidden = hide
+        viewModel.isChatVisible = !hide
+    }
+    
+    func reloadChat() {
         chatTableView.reloadData()
-        guard sender else { return }
-        chatTableView.scrollToRow(at: IndexPath(row: viewModel.messages.count - 1, section: 0), at: .bottom, animated: true)
+        chatTableView.scrollToRow(
+            at: IndexPath(row: viewModel.messages.count - 1, section: 0),
+            at: .bottom, animated: true)
     }
 }
 
