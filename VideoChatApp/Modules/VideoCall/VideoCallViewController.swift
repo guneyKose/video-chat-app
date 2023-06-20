@@ -208,7 +208,7 @@ class VideoCallViewController: UIViewController {
             make.width.equalToSuperview().dividedBy(2)
             make.height.equalTo(200)
             make.leading.equalToSuperview()
-            make.centerY.equalToSuperview()
+            make.centerY.equalTo(messageInputBar).offset(-125)
         }
     }
     

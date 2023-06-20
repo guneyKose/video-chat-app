@@ -28,6 +28,8 @@ class VideoCallTestManagerImpl: VideoCallManager {
         micImage = UIImageView()
         micImage.tintColor = .white
         micImage.image = UIImage(systemName: "mic.slash.fill")
+        
+        self.testRemoteStatusChanges()
     }
     
     func initializeAgoraEngine(delegate: AgoraRtcEngineDelegate) {
@@ -36,6 +38,7 @@ class VideoCallTestManagerImpl: VideoCallManager {
     
     func toggleCamera() {
         debugPrint("toggleCamera")
+        localView.isHidden.toggle()
     }
     
     func switchCamera() {
@@ -47,11 +50,32 @@ class VideoCallTestManagerImpl: VideoCallManager {
     }
     
     func remoteVideoStatusChanged(_ state: AgoraVideoRemoteState) {
-        debugPrint("remoteVideoStatusChanged")
+        switch state {
+        case .starting, .decoding:
+            blurView.removeFromSuperview()
+        case .failed, .frozen, .stopped:
+            blurView.frame = remoteView.frame
+            if remoteView.contains(micImage) {
+                remoteView.insertSubview(blurView, belowSubview: micImage)
+            } else {
+                remoteView.addSubview(blurView)
+            }
+        @unknown default: break
+        }
     }
     
     func remoteAudioStatusChanged(_ state: AgoraAudioRemoteState) {
-        debugPrint("remoteAudioStatusChanged")
+        switch state {
+        case .starting, .decoding:
+            micImage.removeFromSuperview()
+        case .failed, .frozen, .stopped:
+            remoteView.addSubview(micImage)
+            micImage.snp.makeConstraints { make in
+                make.size.equalTo(CGSize(width: 50, height: 50))
+                make.center.equalTo(remoteView.center)
+            }
+        @unknown default: break
+        }
     }
     
     func setupLocalVideo() {
@@ -88,6 +112,32 @@ class VideoCallTestManagerImpl: VideoCallManager {
             self.player?.isMuted = true
             self.player?.play()
             debugPrint("playVideo")
+        })
+    }
+    
+    func testRemoteStatusChanges() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+            self.remoteVideoStatusChanged(.frozen)
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7, execute: {
+            self.remoteAudioStatusChanged(.failed)
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 9, execute: {
+            self.remoteVideoStatusChanged(.decoding)
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 11, execute: {
+            self.remoteAudioStatusChanged(.starting)
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 13, execute: {
+            self.remoteVideoStatusChanged(.frozen)
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: {
+            self.remoteVideoStatusChanged(.starting)
         })
     }
 }

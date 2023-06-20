@@ -50,7 +50,6 @@ class VideoCallManagerImpl: VideoCallManager {
         micImage = UIImageView()
         micImage.tintColor = .white
         micImage.image = UIImage(systemName: "mic.slash.fill")
-        micImage.isHidden = true
     }
     
     func initializeAgoraEngine(delegate: AgoraRtcEngineDelegate) {
