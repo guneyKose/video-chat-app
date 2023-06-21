@@ -40,3 +40,10 @@ class ReachabilityManager: NetworkControl {
         
     }
 }
+
+class ReachabilityTestManager: NetworkControl {
+    func isConnectedToNetwork() -> Bool {
+        let networkStatus = [true, false]
+        return networkStatus.randomElement()!
+    }
+}

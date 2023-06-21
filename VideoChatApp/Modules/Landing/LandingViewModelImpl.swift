@@ -34,7 +34,7 @@ final class LandingViewModelImpl: LandingViewModel {
     let buttonTitle: String
     
     init(deviceAuthManager: DeviceAuthManager,
-         reachabilityManager: ReachabilityManager) {
+         reachabilityManager: NetworkControl) {
         pageTitle = "Start a video chat"
         titleText = "Enter your username"
         placeholderText = "Username"
