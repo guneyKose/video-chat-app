@@ -14,7 +14,7 @@ protocol LandingViewModel {
     var titleText: String { get }
     var placeholderText: String { get }
     var buttonTitle: String { get }
-    var deviceAuthManager: DeviceAuthManager { get set }
+    var deviceAuthManager: DeviceAuth { get set }
     var networkManager: NetworkControl { get set }
     
     func requestCameraAndMicrophonePermission(completion: @escaping (Bool) -> Void)
@@ -27,13 +27,13 @@ final class LandingViewModelImpl: LandingViewModel {
     
     weak var view: LandingView?
     var networkManager: NetworkControl
-    var deviceAuthManager: DeviceAuthManager
+    var deviceAuthManager: DeviceAuth
     let pageTitle: String
     let titleText: String
     let placeholderText: String
     let buttonTitle: String
     
-    init(deviceAuthManager: DeviceAuthManager,
+    init(deviceAuthManager: DeviceAuth,
          reachabilityManager: NetworkControl) {
         pageTitle = "Start a video chat"
         titleText = "Enter your username"
