@@ -74,6 +74,7 @@ final class VideoCallViewModelImpl: NSObject, VideoCallViewModel {
     func sendMessage(_ msg: String) {
         let msg = Message(username: username!, message: msg)
         chatManager.send(message: msg) { [weak self] sent in
+            guard sent else { return }
             guard let self else { return }
             self.messages.append(msg)
             self.view?.reloadChat()

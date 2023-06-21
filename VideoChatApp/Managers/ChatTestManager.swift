@@ -21,9 +21,7 @@ class ChatManagerTestImpl: ChatManager {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 let msg = Message(username: "steve", message: "hello!")
-                self.send(message: msg) { sent in
-                    debugPrint("Message sent")
-                }
+                self.view?.sendMessage(message: msg.message)
             })
         }
     }

@@ -139,5 +139,9 @@ class VideoCallTestManagerImpl: VideoCallManager {
         DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: {
             self.remoteVideoStatusChanged(.starting)
         })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 17, execute: {
+            self.view?.endCall()
+        })
     }
 }
