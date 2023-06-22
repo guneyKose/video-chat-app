@@ -9,9 +9,10 @@ import Foundation
 import AgoraRtcKit
 import AVFoundation
 
-class VideoCallTestManagerImpl: VideoCallManager {
+class VideoCallTestManagerImpl: NSObject, VideoCallManager {
+    
     weak var view: VideoCallView?
-    var agoraEngine: AgoraRtcEngineKit?
+    var videoEngine: AgoraRtcEngineKit?
     var isCameraEnabled: Bool = true
     var isMicOn: Bool = true
     var joined: Bool = false
@@ -21,34 +22,38 @@ class VideoCallTestManagerImpl: VideoCallManager {
     var blurView: UIVisualEffectView
     var micImage: UIImageView
     var player: AVPlayer?
-    
-    init() {
+
+    override init() {
         let blurEffect = UIBlurEffect(style: .regular)
-        blurView = UIVisualEffectView(effect: blurEffect)
-        micImage = UIImageView()
-        micImage.tintColor = .white
-        micImage.image = UIImage(systemName: "mic.slash.fill")
-        
+        self.blurView = UIVisualEffectView(effect: blurEffect)
+        self.micImage = UIImageView()
+        self.micImage.tintColor = .white
+        self.micImage.image = UIImage(systemName: "mic.slash.fill")
+    }
+    
+
+    func initializeVideoEngine() {
+        let config = AgoraRtcEngineConfig()
+        // Pass in your App ID here.
+        config.appId = agoraAppID
+        // Use AgoraRtcEngineDelegate for the following delegate parameter.
+        videoEngine = AgoraRtcEngineKit.sharedEngine(with: config, delegate: self)
         self.testRemoteStatusChanges()
     }
-    
-    func initializeAgoraEngine(delegate: AgoraRtcEngineDelegate) {
-        debugPrint("initializeAgoraEngine")
-    }
-    
+
     func toggleCamera() {
         debugPrint("toggleCamera")
         localView.isHidden.toggle()
     }
-    
+
     func switchCamera() {
         debugPrint("switchCamera")
     }
-    
+
     func toggleMic() {
         player?.isMuted.toggle()
     }
-    
+
     func remoteVideoStatusChanged(_ state: AgoraVideoRemoteState) {
         switch state {
         case .starting, .decoding:
@@ -63,7 +68,7 @@ class VideoCallTestManagerImpl: VideoCallManager {
         @unknown default: break
         }
     }
-    
+
     func remoteAudioStatusChanged(_ state: AgoraAudioRemoteState) {
         switch state {
         case .starting, .decoding:
@@ -77,71 +82,98 @@ class VideoCallTestManagerImpl: VideoCallManager {
         @unknown default: break
         }
     }
-    
+
     func setupLocalVideo() {
         debugPrint("setupLocalVideo")
-        let url = "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        playVideo(view: localView, urlStr: url)
+        playVideo(isLocal: true)
     }
-    
+
     func joinChannel() {
         debugPrint("joinChannel")
-        let url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4"
-        playVideo(view: remoteView, urlStr: url)
+        playVideo(isLocal: false)
+        rtcEngine(videoEngine!, didJoinedOfUid: 10, elapsed: 0)
     }
-    
+
     func leaveChannel() {
         debugPrint("leaveChannel")
         player?.pause()
         player = nil
     }
-    
+
     func didJoinedOfUid(uid: UInt) {
         debugPrint("didJoinedOfUid")
     }
-    
-    private func playVideo(view: UIView, urlStr: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-            let url = URL(string: urlStr)
-            self.player = AVPlayer(url: url!)
+
+    private func playVideo(isLocal: Bool) {
+        DispatchQueue.main.async {
+            let view = isLocal ? self.localView : self.remoteView
+            let videoName = isLocal ? "localVideo" : "remoteVideo"
+            guard let path = Bundle.main.path(forResource: videoName, ofType:"mp4")
+            else { return }
+
+            self.player = AVPlayer(url: URL(fileURLWithPath: path))
             let playerLayer = AVPlayerLayer(player: self.player)
             playerLayer.frame = view.bounds
-            debugPrint("frame: \(playerLayer.frame)")
             playerLayer.videoGravity = .resizeAspectFill
             view.layer.addSublayer(playerLayer)
             self.player?.isMuted = true
+
+            NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                                   object: self.player?.currentItem,
+                                                   queue: nil) { _ in
+                self.player?.seek(to: CMTime.zero)
+                self.player?.play()
+            }
+
             self.player?.play()
-            debugPrint("playVideo")
-        })
+        }
+    }
+    
+    // Callback called when a new host joins the channel
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+        didJoinedOfUid(uid: uid)
+    }
+    
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason, elapsed: Int) {
+        remoteVideoStatusChanged(state)
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState, reason: AgoraAudioRemoteReason, elapsed: Int) {
+        remoteAudioStatusChanged(state)
+    }
+    
+    //When remote user leaves the channel.
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+        view?.endCall()
     }
     
     func testRemoteStatusChanges() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-            self.remoteVideoStatusChanged(.frozen)
+            self.rtcEngine(self.videoEngine!, remoteVideoStateChangedOfUid: 10, state: .failed, reason: .remoteOffline, elapsed: 0)
         })
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 7, execute: {
-            self.remoteAudioStatusChanged(.failed)
+            self.rtcEngine(self.videoEngine!, remoteAudioStateChangedOfUid: 10, state: .frozen, reason: .localMuted, elapsed: 0)
         })
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 9, execute: {
-            self.remoteVideoStatusChanged(.decoding)
+            self.rtcEngine(self.videoEngine!, remoteVideoStateChangedOfUid: 10, state: .decoding, reason: .audioFallback, elapsed: 0)
         })
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 11, execute: {
-            self.remoteAudioStatusChanged(.starting)
+            self.rtcEngine(self.videoEngine!, remoteAudioStateChangedOfUid: 10, state: .starting, reason: .localMuted, elapsed: 0)
         })
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 13, execute: {
-            self.remoteVideoStatusChanged(.frozen)
+            self.rtcEngine(self.videoEngine!, remoteVideoStateChangedOfUid: 10, state: .frozen, reason: .internal, elapsed: 0)
         })
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: {
-            self.remoteVideoStatusChanged(.starting)
+            self.rtcEngine(self.videoEngine!, remoteVideoStateChangedOfUid: 10, state: .starting, reason: .codecNotSupport, elapsed: 0)
         })
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 17, execute: {
-            self.view?.endCall()
+            self.rtcEngine(self.videoEngine!, didOfflineOfUid: 10, reason: .quit)
         })
     }
 }

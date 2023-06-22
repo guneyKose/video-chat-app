@@ -6,10 +6,8 @@
 //
 
 import Foundation
-import AgoraRtcKit
-import AgoraRtmKit
 
-protocol VideoCallViewModel: AgoraRtcEngineDelegate, AgoraRtmDelegate, AgoraRtmChannelDelegate {
+protocol VideoCallViewModel {
     var view: VideoCallView? { get set }
     var videoCallManager: VideoCallManager { get set }
     var chatManager: ChatManager { get set }
@@ -47,18 +45,18 @@ final class VideoCallViewModelImpl: NSObject, VideoCallViewModel {
         }
     }
     
-    init(agoraManager: VideoCallManager,
+    init(videoManager: VideoCallManager,
          chatManager: ChatManager) {
-        self.videoCallManager = agoraManager
+        self.videoCallManager = videoManager
         self.chatManager = chatManager
     }
     
     func onViewDidLoad() {
         videoCallManager.setupLocalVideo()
-        videoCallManager.initializeAgoraEngine(delegate: self)
+        videoCallManager.initializeVideoEngine()
         videoCallManager.joinChannel()
-        chatManager.login(username: username!, delegate: self) {
-            self.chatManager.createChannel(delegate: self)
+        chatManager.login(username: username!) {
+            self.chatManager.createChannel()
         }
     }
     
@@ -87,28 +85,5 @@ final class VideoCallViewModelImpl: NSObject, VideoCallViewModel {
         timer = nil
         view?.reloadChat()
         view?.hideChat(false)
-    }
-    
-    // Callback called when a new host joins the channel
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
-        videoCallManager.didJoinedOfUid(uid: uid)
-    }
-    
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteVideoStateChangedOfUid uid: UInt, state: AgoraVideoRemoteState, reason: AgoraVideoRemoteReason, elapsed: Int) {
-        videoCallManager.remoteVideoStatusChanged(state)
-    }
-
-    func rtcEngine(_ engine: AgoraRtcEngineKit, remoteAudioStateChangedOfUid uid: UInt, state: AgoraAudioRemoteState, reason: AgoraAudioRemoteReason, elapsed: Int) {
-        videoCallManager.remoteAudioStatusChanged(state)
-    }
-    
-    //When remote user leaves the channel.
-    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
-        view?.endCall()
-    }
-    
-    func channel(_ channel: AgoraRtmChannel, messageReceived message: AgoraRtmMessage, from member: AgoraRtmMember) {
-        let message = Message(username: member.userId, message: message.text)
-        chatManager.messageReceived(message: message)
     }
 }

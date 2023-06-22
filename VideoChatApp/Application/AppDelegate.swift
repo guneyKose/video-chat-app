@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navigation = UINavigationController()
         let deviceAuth = DeviceAuthManager()
-        let networkManager = ReachabilityTestManager()
+        let networkManager = ReachabilityManager()
         let viewModel = LandingViewModelImpl(deviceAuthManager: deviceAuth,
                                              reachabilityManager: networkManager)
         let landingVC = LandingViewController(viewModel: viewModel)

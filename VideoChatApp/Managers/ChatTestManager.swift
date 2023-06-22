@@ -8,31 +8,22 @@
 import Foundation
 import AgoraRtmKit
 
-class ChatManagerTestImpl: ChatManager {
+class ChatManagerTestImpl: NSObject, ChatManager {
     weak var view: VideoCallView?
     var rtmChannel: AgoraRtmChannel?
     var kit: AgoraRtmKit?
     var timer: Timer?
     
-    init() {
-        timer = Timer.scheduledTimer(withTimeInterval: 4.9, repeats: true) { timer in
-            let message = Message(username: "jesus", message: "who dis?")
-            self.messageReceived(message: message)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                let msg = Message(username: "steve", message: "hello!")
-                self.view?.sendMessage(message: msg.message)
-            })
-        }
+    init(view: VideoCallView? = nil, rtmChannel: AgoraRtmChannel? = nil, kit: AgoraRtmKit? = nil, timer: Timer? = nil) {
+        self.view = view
+        self.rtmChannel = rtmChannel
+        self.kit = kit
+        self.timer = timer
     }
     
-    deinit {
-        debugPrint("deinit works")
-    }
-    
-    func login(username: String, delegate: AgoraRtmDelegate, _ completion: @escaping () -> Void) {
-        kit = AgoraRtmKit(appId: agoraAppID, delegate: delegate)
-        kit?.agoraRtmDelegate = delegate
+    func login(username: String, _ completion: @escaping () -> Void) {
+        kit = AgoraRtmKit(appId: agoraAppID, delegate: self)
+        kit?.agoraRtmDelegate = self
         kit?.login(byToken: nil, user: username) { [unowned self] (errorCode) in
             guard errorCode == .ok else {
                 debugPrint("Login Error Code: ", errorCode)
@@ -43,18 +34,29 @@ class ChatManagerTestImpl: ChatManager {
         }
     }
     
-    func createChannel(delegate: AgoraRtmChannelDelegate) {
-        guard let rtmChannel = kit?.createChannel(withId: "test", delegate: delegate) else {
+    func createChannel() {
+        guard let rtmChannel = kit?.createChannel(withId: "test", delegate: self) else {
             debugPrint("Could not create RTM Channel")
             return
         }
-        rtmChannel.channelDelegate = delegate
+        rtmChannel.channelDelegate = self
         rtmChannel.join { [weak self] (error) in
             if error != .channelErrorOk, let strongSelf = self {
                 debugPrint("Error Joining RTM Channel: \(error.rawValue)")
             }
         }
         self.rtmChannel = rtmChannel
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 4.9, repeats: true) { timer in
+            let sender = AgoraRtmMember()
+            sender.userId = "jesus"
+            let rtmMessage = AgoraRtmMessage(text: "who dis?")
+            self.channel(rtmChannel, messageReceived: rtmMessage, from: sender)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                self.view?.sendMessage(message: "hello!")
+            })
+        }
     }
     
     func logout() {
@@ -76,8 +78,8 @@ class ChatManagerTestImpl: ChatManager {
         }
     }
     
-    func messageReceived(message: Message) {
-        debugPrint("messageReceived")
+    func channel(_ channel: AgoraRtmChannel, messageReceived message: AgoraRtmMessage, from member: AgoraRtmMember) {
+        let message = Message(username: member.userId, message: message.text)
         view?.messageReceived(message: message)
     }
 }

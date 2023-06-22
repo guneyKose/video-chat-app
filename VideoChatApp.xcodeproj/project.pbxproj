@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3041D6302A36F53E0035FD9C /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3041D62F2A36F53E0035FD9C /* ReachabilityManager.swift */; };
+		304FE5B22A44412400A0DD49 /* localVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 304FE5B02A44412400A0DD49 /* localVideo.mp4 */; };
+		304FE5B32A44412400A0DD49 /* remoteVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 304FE5B12A44412400A0DD49 /* remoteVideo.mp4 */; };
 		305B573F2A39CD8A000AD888 /* DeviceAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305B573E2A39CD8A000AD888 /* DeviceAuthManager.swift */; };
 		305B57412A3A00B8000AD888 /* VideoCallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305B57402A3A00B8000AD888 /* VideoCallManager.swift */; };
 		309980C42A30A645009CB536 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309980C32A30A645009CB536 /* AppDelegate.swift */; };
@@ -34,6 +36,8 @@
 
 /* Begin PBXFileReference section */
 		3041D62F2A36F53E0035FD9C /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
+		304FE5B02A44412400A0DD49 /* localVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = localVideo.mp4; sourceTree = "<group>"; };
+		304FE5B12A44412400A0DD49 /* remoteVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = remoteVideo.mp4; sourceTree = "<group>"; };
 		305B573E2A39CD8A000AD888 /* DeviceAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAuthManager.swift; sourceTree = "<group>"; };
 		305B57402A3A00B8000AD888 /* VideoCallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallManager.swift; sourceTree = "<group>"; };
 		309980C02A30A645009CB536 /* VideoChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +139,8 @@
 		309980DA2A30A6BA009CB536 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				304FE5B02A44412400A0DD49 /* localVideo.mp4 */,
+				304FE5B12A44412400A0DD49 /* remoteVideo.mp4 */,
 				309980CC2A30A647009CB536 /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -300,7 +306,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				309980D02A30A647009CB536 /* LaunchScreen.storyboard in Resources */,
+				304FE5B32A44412400A0DD49 /* remoteVideo.mp4 in Resources */,
 				309980CD2A30A647009CB536 /* Assets.xcassets in Resources */,
+				304FE5B22A44412400A0DD49 /* localVideo.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

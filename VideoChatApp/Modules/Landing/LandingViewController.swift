@@ -123,9 +123,9 @@ extension LandingViewController: LandingView {
     }
     
     func navigateToVideoCall() {
-        let agoraManager = VideoCallTestManagerImpl()
+        let videoManager = VideoCallTestManagerImpl()
         let chatManager = ChatManagerTestImpl()
-        let viewModel = VideoCallViewModelImpl(agoraManager: agoraManager,
+        let viewModel = VideoCallViewModelImpl(videoManager: videoManager,
                                                chatManager: chatManager)
         let vc = VideoCallViewController(viewModel: viewModel)
         vc.viewModel.username = usernameTextField.text

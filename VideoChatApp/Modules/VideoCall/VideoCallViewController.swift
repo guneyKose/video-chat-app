@@ -316,6 +316,10 @@ extension VideoCallViewController: VideoCallView {
     func hideChat(_ hide: Bool) {
         chatTableView.isHidden = hide
         viewModel.isChatVisible = !hide
+        if !viewModel.isMessageInputOpen {
+            chatTableView.center = CGPoint(x: chatTableView.center.x,
+                                           y: controlView.frame.minY - 10 - chatTableView.frame.height / 2)
+        }
     }
     
     func reloadChat() {
