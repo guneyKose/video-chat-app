@@ -97,13 +97,9 @@ class VideoCallManagerImpl: NSObject, VideoCallManager {
     func remoteAudioStatusChanged(_ state: AgoraAudioRemoteState) {
         switch state {
         case .starting, .decoding:
-            micImage.removeFromSuperview()
+            micImage.isHidden = true
         case .failed, .frozen, .stopped:
-            remoteView.addSubview(micImage)
-            micImage.snp.makeConstraints { make in
-                make.size.equalTo(CGSize(width: 50, height: 50))
-                make.center.equalTo(remoteView.center)
-            }
+            micImage.isHidden = false
         @unknown default: break
         }
     }
@@ -159,6 +155,14 @@ class VideoCallManagerImpl: NSObject, VideoCallManager {
         videoCanvas.renderMode = .hidden
         videoCanvas.view = remoteView
         videoEngine?.setupRemoteVideo(videoCanvas)
+        DispatchQueue.main.async {
+            self.remoteView.addSubview(self.micImage)
+            self.micImage.snp.makeConstraints { make in
+                make.size.equalTo(CGSize(width: 50, height: 50))
+                make.center.equalTo(self.remoteView.center)
+            }
+            self.micImage.isHidden = true
+        }
     }
     
     // Callback called when a new host joins the channel

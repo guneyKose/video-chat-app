@@ -72,13 +72,9 @@ class VideoCallTestManagerImpl: NSObject, VideoCallManager {
     func remoteAudioStatusChanged(_ state: AgoraAudioRemoteState) {
         switch state {
         case .starting, .decoding:
-            micImage.removeFromSuperview()
+            micImage.isHidden = true
         case .failed, .frozen, .stopped:
-            remoteView.addSubview(micImage)
-            micImage.snp.makeConstraints { make in
-                make.size.equalTo(CGSize(width: 50, height: 50))
-                make.center.equalTo(remoteView.center)
-            }
+            micImage.isHidden = false
         @unknown default: break
         }
     }
@@ -92,6 +88,15 @@ class VideoCallTestManagerImpl: NSObject, VideoCallManager {
         debugPrint("joinChannel")
         playVideo(isLocal: false)
         rtcEngine(videoEngine!, didJoinedOfUid: 10, elapsed: 0)
+        
+        DispatchQueue.main.async {
+            self.remoteView.addSubview(self.micImage)
+            self.micImage.snp.makeConstraints { make in
+                make.size.equalTo(CGSize(width: 50, height: 50))
+                make.center.equalTo(self.remoteView.center)
+            }
+            self.micImage.isHidden = true
+        }
     }
 
     func leaveChannel() {
