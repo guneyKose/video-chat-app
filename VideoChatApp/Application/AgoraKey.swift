@@ -7,4 +7,4 @@
 
 import Foundation
 
-let agoraAppID: String = "0f70126287034cc4899df976c18ddf49"
+let agoraAppID: String = <#Agora Key Here#>
